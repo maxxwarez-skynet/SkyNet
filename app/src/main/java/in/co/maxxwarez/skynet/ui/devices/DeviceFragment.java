@@ -1,4 +1,4 @@
-package in.co.maxxwarez.skynet.ui.gallery;
+package in.co.maxxwarez.skynet.ui.devices;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,22 +12,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import in.co.maxxwarez.skynet.R;
 
-public class GalleryFragment extends Fragment {
+public class DeviceFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private DeviceViewModel deviceViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+        deviceViewModel =
+                new ViewModelProvider(this).get(DeviceViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_device, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        deviceViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 }

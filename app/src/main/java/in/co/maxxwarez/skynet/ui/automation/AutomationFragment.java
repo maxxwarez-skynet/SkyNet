@@ -1,4 +1,4 @@
-package in.co.maxxwarez.skynet.ui.slideshow;
+package in.co.maxxwarez.skynet.ui.automation;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,22 +12,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import in.co.maxxwarez.skynet.R;
 
-public class SlideshowFragment extends Fragment {
+public class AutomationFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private AutomationViewModel automationViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
+        automationViewModel =
+                new ViewModelProvider(this).get(AutomationViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_automation, container, false);
         final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        automationViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 }

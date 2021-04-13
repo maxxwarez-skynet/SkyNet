@@ -1,16 +1,16 @@
-package in.co.maxxwarez.skynet.ui.gallery;
+package in.co.maxxwarez.skynet.ui.devices;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+public class DeviceViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public DeviceViewModel () {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("This is device fragment");
     }
 
     public LiveData<String> getText() {
