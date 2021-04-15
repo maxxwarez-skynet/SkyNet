@@ -41,16 +41,15 @@ public class MainActivity extends AppCompatActivity  {
                    R.id.nav_home, R.id.nav_device, R.id.nav_automation)
                    .setDrawerLayout(drawer)
                    .build();
+           NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+           NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+           NavigationUI.setupWithNavController(navigationView, navController);
+
        }
        else {
-           mAppBarConfiguration = new AppBarConfiguration.Builder(
-           )
-                   .setDrawerLayout(drawer)
-                   .build();
+           Intent myIntent = new Intent(this, Sample.class);
+           startActivity(myIntent);
        }
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-            NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-            NavigationUI.setupWithNavController(navigationView, navController);
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

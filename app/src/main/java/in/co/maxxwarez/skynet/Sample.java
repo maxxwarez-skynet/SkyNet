@@ -30,25 +30,31 @@ public class Sample extends AppCompatActivity implements View.OnClickListener {
     private GoogleSignInClient mGoogleSignInClient;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sample);
+        setContentView(R.layout.activity_login);
+        findViewById(R.id.sign_in).setOnClickListener(this);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mAuth = FirebaseAuth.getInstance();
     }
 
 
-
     @Override
-    public void onStart() {
+    public void onStart () {
         super.onStart();
-        if(mAuth.getCurrentUser() !=null) {
+        if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult (int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -65,13 +71,13 @@ public class Sample extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle (GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    public void onComplete (@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
@@ -84,20 +90,24 @@ public class Sample extends AppCompatActivity implements View.OnClickListener {
                 });
     }
 
-    private void signIn() {
+    private void signIn () {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick (View v) {
 
         int i = v.getId();
-        if (i == R.id.sign_in_button) {
+        if (i == R.id.sign_in) {
+            Log.d(TAG, "ONE:");
             signIn();
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
+            if (i == R.id.sign_in_button) {
+                Log.d(TAG, "TWO:");
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
 
+        }
     }
 }
