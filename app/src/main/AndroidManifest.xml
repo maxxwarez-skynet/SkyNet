@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="in.co.maxxwarez.skynet" >
+    package="in.co.maxxwarez.skynet">
 
     <application
         android:allowBackup="true"
@@ -8,11 +8,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SkyNet" >
+        android:theme="@style/Theme.SkyNet">
+        <activity android:name=".Sample"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.SkyNet.NoActionBar" >
+            android:theme="@style/Theme.SkyNet.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
