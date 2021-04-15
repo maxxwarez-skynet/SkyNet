@@ -22,7 +22,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Sample extends AppCompatActivity implements View.OnClickListener {
+public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "SkyNet";
     private static final int RC_SIGN_IN = 9001;

@@ -6,13 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -32,10 +30,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.concurrent.Executor;
 
-import in.co.maxxwarez.skynet.MainActivity;
 import in.co.maxxwarez.skynet.R;
-import in.co.maxxwarez.skynet.Sample;
-import in.co.maxxwarez.skynet.ui.devices.DeviceFragment;
+import in.co.maxxwarez.skynet.Login;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -129,7 +125,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick (View v) {
         //signIn();
-        Intent myIntent = new Intent(getActivity(), Sample.class);
+        Intent myIntent = new Intent(getActivity(), Login.class);
         getActivity().startActivity(myIntent);
     }
 }
