@@ -3,6 +3,8 @@ package in.co.maxxwarez.skynet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -26,7 +28,11 @@ public class MainActivity extends AppCompatActivity  {
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-
+        View headerView = navigationView.getHeaderView(0);
+        // get user name and email textViews
+        TextView userName = headerView.findViewById(R.id.userName);
+        TextView userEmail = headerView.findViewById(R.id.userEmail);
+        // set user name and email
        userHelper user = new userHelper();
        if(user.isLoggedIn()) {
            mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -36,7 +42,8 @@ public class MainActivity extends AppCompatActivity  {
            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
            NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
            NavigationUI.setupWithNavController(navigationView, navController);
-
+userName.setText(user.getDisplayName());
+userEmail.setText(user.getEmailID());
        }
        else {
            Intent myIntent = new Intent(this, Login.class);

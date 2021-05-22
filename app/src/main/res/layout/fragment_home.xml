@@ -20,15 +20,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.gms.common.SignInButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sign_in_button"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        tools:ignore="MissingConstraints">
 
-    </com.google.android.gms.common.SignInButton>
 </androidx.constraintlayout.widget.ConstraintLayout>
