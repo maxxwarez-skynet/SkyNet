@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "1023650240753",
-    "project_id": "skynet-v01",
-    "storage_bucket": "skynet-v01.appspot.com"
+    "project_number": "520435142007",
+    "project_id": "skynet-v1-01",
+    "storage_bucket": "skynet-v1-01.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1023650240753:android:a7b48fd6d181c35bdc3150",
+        "mobilesdk_app_id": "1:520435142007:android:7162b246671fe534af6572",
         "android_client_info": {
           "package_name": "in.co.maxxwarez.skynet"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1023650240753-625jcu7oiqr0rvljrgv9kqdmd0rop67m.apps.googleusercontent.com",
+          "client_id": "520435142007-a26hraknkh146lclilrgirufq8n41565.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.co.maxxwarez.skynet",
+            "certificate_hash": "c809ca447038863003a94c0f0cfd65d2ab5d9a6d"
+          }
+        },
+        {
+          "client_id": "520435142007-ikdb1mn1j4onqe5pbvfaeiv2hd2c9ahf.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCbJ8sMTwVfFn4N25smrCbCSp8Xu4u_x0U"
+          "current_key": "AIzaSyBGvsVFG-svqGwAgC4n0ADBwdJn2zgpFJI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1023650240753-625jcu7oiqr0rvljrgv9kqdmd0rop67m.apps.googleusercontent.com",
+              "client_id": "520435142007-ikdb1mn1j4onqe5pbvfaeiv2hd2c9ahf.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

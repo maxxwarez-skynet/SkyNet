@@ -41,6 +41,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
+
     }
 
 
@@ -58,6 +59,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     public void startIntent(){
         Intent intent = new Intent(this, MainActivity.class);
+        userHelper user = new userHelper();
+        user.createUser();
         startActivity(intent);
     }
     @Override
