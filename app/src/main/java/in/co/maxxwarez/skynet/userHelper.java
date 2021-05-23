@@ -10,7 +10,7 @@ public class userHelper {
     public userHelper () {
     }
 
-    public String getUserName () {
+    public String getUID () {
         return user.getUid();
     }
 

@@ -16,12 +16,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -33,22 +33,21 @@ public class MainActivity extends AppCompatActivity  {
         TextView userName = headerView.findViewById(R.id.userName);
         TextView userEmail = headerView.findViewById(R.id.userEmail);
         // set user name and email
-       userHelper user = new userHelper();
-       if(user.isLoggedIn()) {
-           mAppBarConfiguration = new AppBarConfiguration.Builder(
-                   R.id.nav_home, R.id.nav_device, R.id.nav_automation)
-                   .setDrawerLayout(drawer)
-                   .build();
-           NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-           NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-           NavigationUI.setupWithNavController(navigationView, navController);
-userName.setText(user.getDisplayName());
-userEmail.setText(user.getEmailID());
-       }
-       else {
-           Intent myIntent = new Intent(this, Login.class);
-           startActivity(myIntent);
-       }
+        userHelper user = new userHelper();
+        if (user.isLoggedIn()) {
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_home, R.id.nav_device, R.id.nav_automation)
+                    .setDrawerLayout(drawer)
+                    .build();
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+            NavigationUI.setupWithNavController(navigationView, navController);
+            userName.setText(user.getDisplayName());
+            userEmail.setText(user.getEmailID());
+        } else {
+            Intent myIntent = new Intent(this, Login.class);
+            startActivity(myIntent);
+        }
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -56,14 +55,14 @@ userEmail.setText(user.getEmailID());
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu (Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
+    public boolean onSupportNavigateUp () {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
