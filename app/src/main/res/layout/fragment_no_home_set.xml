@@ -3,12 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:textAlignment="center"
+    android:background="@drawable/night"
     tools:context=".ui.fragments.NoHomeSet">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/no_home_found" />
+        android:layout_height="65dp"
+        android:paddingVertical="20dp"
+        android:text="@string/no_home_found"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
 </FrameLayout>
