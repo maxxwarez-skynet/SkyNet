@@ -106,5 +106,10 @@
     <string name="hello_blank_fragment">Hello blank fragment<br />fdfggdfgdfgfdgdfgdfgdfvfdvsdvdsvdsvdvdssffsfsfdsfdsfadfdsfs                                                                        gsggsfdsfd                                                           ggfdfgd                                                        fdfdsfdf                              ffdgdg                                                                                                   66666 </string>
     <string name="hello_blank_fragment2">Hello blank fragment2</string>
     <string name="set_home">Set Home</string>
+    <string name="give_a_name_to_your_new_home">Give a name to your new Home</string>
+    <string name="get_address">Get Address</string>
+    <string name="service_not_available">Service Not Available</string>
+    <string name="invalid_lat_long_used">Invalid Coordinates</string>
+    <string name="no_address_found">No Address Found</string>
 
 </resources>

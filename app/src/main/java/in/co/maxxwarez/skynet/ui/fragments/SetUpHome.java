@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import in.co.maxxwarez.skynet.R;
+import in.co.maxxwarez.skynet.SampleFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,11 +50,18 @@ public class SetUpHome extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick (View v) {
-        SetHomeDetail setHomeDetail = SetHomeDetail.newInstance();
+        Log.i(TAG, "SetUpHome On Click ");
+        /*SetHomeDetail setHomeDetail = SetHomeDetail.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         fragmentTransaction.replace(R.id.detailsList, setHomeDetail).addToBackStack(null).commit();
+*/
+        MapsFragment mapsFragment = new MapsFragment();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        fragmentTransaction.replace(R.id.detailsList, mapsFragment).addToBackStack(null).commit();
 
     }
 }
