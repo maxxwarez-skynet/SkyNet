@@ -51,17 +51,16 @@ public class SetUpHome extends Fragment implements View.OnClickListener {
     @Override
     public void onClick (View v) {
         Log.i(TAG, "SetUpHome On Click ");
-        /*SetHomeDetail setHomeDetail = SetHomeDetail.newInstance();
+        SetHomeDetail setHomeDetail = SetHomeDetail.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        fragmentTransaction.replace(R.id.detailsList, setHomeDetail).addToBackStack(null).commit();
-*/
-        MapsFragment mapsFragment = new MapsFragment();
+        fragmentTransaction.add(R.id.detailsList, setHomeDetail).addToBackStack(null).commit();
+        /*MapsFragment mapsFragment = new MapsFragment();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         fragmentTransaction.replace(R.id.detailsList, mapsFragment).addToBackStack(null).commit();
-
+*/
     }
 }

@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,14 +37,7 @@ import in.co.maxxwarez.skynet.R;
 public class SetHomeDetail extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "SkyNet";
-    private TextView mAddress;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private LocationCallback mLocationCallback;
-    private AnimatorSet mRotateAnim;
-    private boolean mTrackingLocation;
-
-    private static final int REQUEST_LOCATION_PERMISSION = 1;
-    private static final String TRACKING_LOCATION_KEY = "tracking_location";
+    EditText mhomeName;
     public SetHomeDetail () {
         // Required empty public constructor
     }
@@ -55,21 +50,25 @@ public class SetHomeDetail extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Initialize the FusedLocationClient.
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-
+        Log.i(TAG, "On Create");
+        Bundle bs = this.getArguments();
+        if(bs != null){
+            Log.i(TAG, bs.getString("homeName"));
+        }
     }
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
+        Log.i(TAG, "On Create View");
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_set_home_detail, container, false);
-        EditText homeName = view.findViewById(R.id.homeName);
+        mhomeName = view.findViewById(R.id.homeName);
         Button b = view.findViewById(R.id.getLocation);
         b.setOnClickListener(this);
-        mAddress = view.findViewById(R.id.addressBox);
-        homeName.addTextChangedListener(new TextWatcher() {
+        mhomeName.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged (CharSequence s, int start, int before, int count) {
@@ -105,35 +104,17 @@ public class SetHomeDetail extends Fragment implements View.OnClickListener {
     public void onClick (View v) {
         int i = v.getId();
         if(i==R.id.getLocation){
-            Log.i(TAG, "On Click");
+            MapsFragment mapsFragment = new MapsFragment();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+            Bundle b = new Bundle();
+            b.putString("homeName", String.valueOf(mhomeName.getText()));
+            mapsFragment.setArguments(b);
+            fragmentTransaction.add(R.id.detailsList, mapsFragment).addToBackStack(null).commit();
         }
 
-        startTrackingLocation();
     }
 
-    private void startTrackingLocation() {
-        Log.i(TAG, "Start Tracking Location");
-        if (ActivityCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]
-                            {Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSION);
-        } else {
-            mTrackingLocation = true;
-            mFusedLocationClient.requestLocationUpdates
-                    (getLocationRequest(),
-                            mLocationCallback,
-                            null /* Looper */);
 
-            // Set a loading text while you wait for the address to be
-            // returned
-
-        }
-    }
-    private LocationRequest getLocationRequest() {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        return locationRequest;
-    }
 }
