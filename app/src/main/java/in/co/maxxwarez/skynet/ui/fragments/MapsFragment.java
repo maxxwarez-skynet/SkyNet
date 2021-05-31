@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,10 @@ import java.util.Set;
 
 import in.co.maxxwarez.skynet.R;
 
+import static android.content.ContentValues.TAG;
+
 public class MapsFragment extends Fragment  {
+    private static final String TAG = "SkyNet";
     String mhomeName;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -46,38 +50,32 @@ public class MapsFragment extends Fragment  {
         @SuppressLint("MissingPermission")
         @Override
         public void onMapReady (GoogleMap googleMap) {
-            //LatLng myLocation = new LatLng(34, 251);
-            //LatLng myLocation = new LatLng(location.getLatitude(),location.getLongitude());
-            //googleMap.addMarker(new MarkerOptions().position(myLocation).title("Marker in Sydney"));
-            //googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+            FragmentManager fragmentManager = getParentFragmentManager();
+            SetUpHome setUpHome = (SetUpHome) fragmentManager.findFragmentById(R.id.settingsList);
+
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.setMyLocationEnabled(true);
             googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
                 @Override
                 public boolean onMyLocationButtonClick () {
+                    setUpHome.mbutton.setText("Tap on your location");
+                    setUpHome.flag = "";
                     return false;
                 }
             });
             googleMap.setOnMyLocationClickListener(new GoogleMap.OnMyLocationClickListener() {
                 @Override
                 public void onMyLocationClick (@NonNull @NotNull Location location) {
-                    Toast.makeText(getContext(), "Current location:\n" + location, Toast.LENGTH_LONG)
-                            .show();
+                 //   Toast.makeText(getContext(), "Current location:\n" + location, Toast.LENGTH_LONG)
+                 //           .show();
                    // LatLng myLocation = new LatLng(34, 251);
                     LatLng myLocation = new LatLng(location.getLatitude(),location.getLongitude());
                     googleMap.clear();
                     googleMap.addMarker(new MarkerOptions().position(myLocation).title("Marker at your " + mhomeName));
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
-                    SetHomeDetail setHomeDetail = new SetHomeDetail();
-                   FragmentManager fragmentManager = getParentFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);fragmentTransaction.replace(R.id.detailsList, setHomeDetail).addToBackStack(null).commit();
-
-                    Bundle b = new Bundle();
-                    b.putString("homeName", "String.valueOf(mhomeName.getText())");
-                    setHomeDetail.setArguments(b);
-                    fragmentTransaction.replace(R.id.detailsList, setHomeDetail);
-
+                    setUpHome.mbutton.setText("Done");
+                    Log.i(TAG, "clicked map");
+                    setUpHome.flag = "three";
 
                 }
             });
@@ -97,13 +95,7 @@ public class MapsFragment extends Fragment  {
                             .show();
                 }
             });
-           // LatLng sydney = new LatLng(34, 251);
-          //  googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-           // googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        }
-
-
-
+           }
     };
 
 

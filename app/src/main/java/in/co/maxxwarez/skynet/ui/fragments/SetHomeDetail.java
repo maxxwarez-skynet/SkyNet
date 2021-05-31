@@ -78,7 +78,7 @@ public class SetHomeDetail extends Fragment implements View.OnClickListener {
                     b.setVisibility(View.GONE);
                 } else {
                     Log.i(TAG, "Text Changed ELSE" + s.toString().trim().length());
-                    b.setVisibility(View.VISIBLE);
+                    changeSettingsFragmentLabel();
                 }
             }
 
@@ -98,19 +98,26 @@ public class SetHomeDetail extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    private void changeSettingsFragmentLabel () {
+        FragmentManager fm = getParentFragmentManager();
+        SetUpHome setUpHome = (SetUpHome) fm.findFragmentById(R.id.settingsList);
+        setUpHome.flag = "two";
+        setUpHome.remoteEvent("Next");
+        setUpHome.homeName = String.valueOf(mhomeName.getText());
+        Log.i(TAG,String.valueOf(mhomeName.getText()));
+
+    }
 
 
     @Override
     public void onClick (View v) {
         int i = v.getId();
         if(i==R.id.getLocation){
+
             MapsFragment mapsFragment = new MapsFragment();
             FragmentManager fragmentManager = getParentFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-            Bundle b = new Bundle();
-            b.putString("homeName", String.valueOf(mhomeName.getText()));
-            mapsFragment.setArguments(b);
             fragmentTransaction.add(R.id.detailsList, mapsFragment).addToBackStack(null).commit();
         }
 

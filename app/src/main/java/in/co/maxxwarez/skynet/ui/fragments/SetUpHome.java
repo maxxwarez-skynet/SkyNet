@@ -1,5 +1,7 @@
 package in.co.maxxwarez.skynet.ui.fragments;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,8 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import in.co.maxxwarez.skynet.MainActivity;
 import in.co.maxxwarez.skynet.R;
-import in.co.maxxwarez.skynet.SampleFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,10 +29,13 @@ import in.co.maxxwarez.skynet.SampleFragment;
  */
 public class SetUpHome extends Fragment implements View.OnClickListener {
     private static final String TAG = "SkyNet";
+    Button mbutton;
+    public  String flag = "one";
+    public String homeName;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     public SetUpHome () {
         // Required empty public constructor
     }
-
 
     public static SetUpHome newInstance () {
         SetUpHome fragment = new SetUpHome();
@@ -42,8 +52,8 @@ public class SetUpHome extends Fragment implements View.OnClickListener {
                               Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_set_up_home, container, false);
-        Button b = view.findViewById(R.id.setHome);
-        b.setOnClickListener(this);
+        mbutton  = view.findViewById(R.id.setHome);
+        mbutton.setOnClickListener(this);
         return view;
     }
 
@@ -51,16 +61,64 @@ public class SetUpHome extends Fragment implements View.OnClickListener {
     @Override
     public void onClick (View v) {
         Log.i(TAG, "SetUpHome On Click ");
-        SetHomeDetail setHomeDetail = SetHomeDetail.newInstance();
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        fragmentTransaction.add(R.id.detailsList, setHomeDetail).addToBackStack(null).commit();
-        /*MapsFragment mapsFragment = new MapsFragment();
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        fragmentTransaction.replace(R.id.detailsList, mapsFragment).addToBackStack(null).commit();
-*/
+        clicked();
     }
+
+    private void clicked () {
+        Log.i(TAG, "clicked " + flag);
+        if(flag == "one"){
+            SetHomeDetail setHomeDetail = SetHomeDetail.newInstance();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+            fragmentTransaction.add(R.id.detailsList, setHomeDetail).commit();
+        }
+        if(flag == "two") {
+            Log.i(TAG, "clicked two " + flag);
+            MapsFragment mapsFragment = new MapsFragment();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+            fragmentTransaction.add(R.id.detailsList, mapsFragment).commit();
+            FragmentManager fm = getParentFragmentManager();
+            fm.findFragmentById(R.id.homeList);
+            NoHomeSet noHomeSet = (NoHomeSet) fm.findFragmentById(R.id.homeList);
+            noHomeSet.mTextView.setText("Set Location for your home");
+            FragmentManager fragmentManager1 = getParentFragmentManager();
+            SetUpHome setUpHome = (SetUpHome) fragmentManager1.findFragmentById(R.id.settingsList);
+            setUpHome.mbutton.setText("Press the Locate Me button to get your location");
+
+        }
+        if(flag == "three"){
+            Log.i(TAG, "clicked three " + flag);
+            updateFirebase Fbase = new updateFirebase();
+            Fbase.execute();
+        }
+    }
+
+    public void remoteEvent (String next){
+            Log.i(TAG, "Remote Event" + next);
+            mbutton.setText(next);
+
+    }
+
+    class updateFirebase extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            String homeID = ref.child("home").push().getKey();
+            ref.child("users").child(user.getUid()).child("home").child(homeID).setValue(homeName);
+            ref.child("homes").child(homeID).setValue(homeName);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Intent i = new Intent(getActivity(), MainActivity.class);
+            startActivity(i);
+        }
+    }
+
 }
