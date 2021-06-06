@@ -1,9 +1,12 @@
 package in.co.maxxwarez.skynet.ui.home;
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
 
 import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.ui.fragments.HomeList;
@@ -30,7 +36,7 @@ public class HomeFragment extends Fragment {
     private final static String TAG = "SkyNet";
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-    Query query = ref.child("users").child(user.getUid()).child("home");
+    Query query = ref.child("users").child(user.getUid()).child("homes");
 
     public View onCreateView (@NonNull LayoutInflater inflater,
                               ViewGroup container, Bundle savedInstanceState) {
@@ -40,7 +46,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                   homeSet();
+                    homeSet();
                 }
                 else
                 {
@@ -73,11 +79,12 @@ public class HomeFragment extends Fragment {
         setupHome();
     }
 
-    public void homeSet(){
+    public void homeSet (){
         HomeList homeList =  HomeList.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.homeList, homeList).commit();
+        settingsList();
     }
     public void settingsList(){
         SettingsList settingsList = SettingsList.newInstance();
