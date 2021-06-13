@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 
 import in.co.maxxwarez.skynet.R;
+import in.co.maxxwarez.skynet.ui.fragments.DetailList;
 import in.co.maxxwarez.skynet.ui.fragments.HomeList;
 import in.co.maxxwarez.skynet.ui.fragments.InstructionsDetail;
 import in.co.maxxwarez.skynet.ui.fragments.NoHomeSet;
@@ -86,17 +87,27 @@ public class HomeFragment extends Fragment {
         fragmentTransaction.replace(R.id.homeList, homeList).commit();
         settingsList();
     }
-    public void settingsList(){
+
+    public void settingsList () {
         SettingsList settingsList = SettingsList.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.settingsList, settingsList).commit();
+        //detalisList();
     }
-    public void setUpInstructionsDetail(){
+
+    private void detalisList () {
+        DetailList detailList = DetailList.newInstance();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.detailsList, detailList).commit();
+    }
+
+    public void setUpInstructionsDetail () {
         InstructionsDetail instructionsDetail = InstructionsDetail.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.detailsList,instructionsDetail ).commit();
+        fragmentTransaction.replace(R.id.detailsList, instructionsDetail).commit();
     }
 
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.NoDevice">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/text_noDevice"
+        android:layout_width="match_parent"
+        android:layout_height="171dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="1dp"
+        android:gravity="center"
+        android:text="@string/you_don_t_have_a_device_added_if_you_have_a_devce_click_above" />
+
+    <Button
+        android:id="@+id/device_yes"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="onClick"
+        android:text="Yes" />
+
+    <Button
+        android:id="@+id/device_no"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:onClick="onClick"
+        android:text="No" />
+
+</RelativeLayout>

@@ -10,29 +10,33 @@ import android.view.ViewGroup;
 
 import in.co.maxxwarez.skynet.R;
 
-public class SettingsList extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link Overview#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class Overview extends Fragment {
 
-    public SettingsList () {
+
+    public Overview () {
         // Required empty public constructor
     }
 
 
-    // TODO: Rename and change types and number of parameters
-    public static SettingsList newInstance () {
-        SettingsList fragment = new SettingsList();
+    public static Overview newInstance () {
+        Overview fragment = new Overview();
         return fragment;
     }
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings_list, container, false);
+        return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 }
