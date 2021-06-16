@@ -43,7 +43,7 @@ public class SetUpDevice extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_set_up_device, container, false);
 
-        mbutton = v.findViewById(R.id.setHome);
+        mbutton = v.findViewById(R.id.set_up_button);
         mbutton.setOnClickListener(this);
 
         return v;

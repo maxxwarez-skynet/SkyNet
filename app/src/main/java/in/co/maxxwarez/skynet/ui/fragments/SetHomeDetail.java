@@ -1,12 +1,7 @@
 package in.co.maxxwarez.skynet.ui.fragments;
 
-import android.Manifest;
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,15 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-
-import in.co.maxxwarez.skynet.FetchAddressTask;
 import in.co.maxxwarez.skynet.R;
+import in.co.maxxwarez.skynet.ui.commons.SetUpButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,7 +42,7 @@ public class SetHomeDetail extends Fragment implements View.OnClickListener {
         Log.i(TAG, "On Create");
         Bundle bs = this.getArguments();
         if(bs != null){
-            Log.i(TAG, bs.getString("homeName"));
+            Log.i(TAG, "IsLog" + bs.getString("homeName"));
         }
     }
 
@@ -99,12 +88,12 @@ public class SetHomeDetail extends Fragment implements View.OnClickListener {
     }
 
     private void changeSettingsFragmentLabel () {
-        FragmentManager fm = getParentFragmentManager();
-        SetUpHome setUpHome = (SetUpHome) fm.findFragmentById(R.id.settingsList);
-        setUpHome.flag = "two";
-        setUpHome.remoteEvent("Next");
-        setUpHome.homeName = String.valueOf(mhomeName.getText());
-        Log.i(TAG,String.valueOf(mhomeName.getText()));
+        FragmentManager fragmentManager = getParentFragmentManager();
+        SetUpButton setUpButton = (SetUpButton) fragmentManager.findFragmentById(R.id.home_settings_list);
+        setUpButton.flag = "two";
+        setUpButton.remoteEvent("Next");
+        setUpButton.homeName = String.valueOf(mhomeName.getText());
+        Log.i(TAG, String.valueOf(mhomeName.getText()));
 
     }
 
@@ -118,7 +107,7 @@ public class SetHomeDetail extends Fragment implements View.OnClickListener {
             FragmentManager fragmentManager = getParentFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-            fragmentTransaction.add(R.id.detailsList, mapsFragment).addToBackStack(null).commit();
+            fragmentTransaction.replace(R.id.home_details_list, mapsFragment).addToBackStack(null).commit();
         }
 
     }

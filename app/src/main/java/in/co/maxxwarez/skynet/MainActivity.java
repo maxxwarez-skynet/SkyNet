@@ -2,7 +2,6 @@ package in.co.maxxwarez.skynet;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
@@ -25,8 +24,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupWithNavController(navigationView, navController);
             userName.setText(user.getDisplayName());
             userEmail.setText(user.getEmailID());
+            //getActionBar().setTitle("Hello world App");
+            //changeActionBarText("Test");
+
         } else {
             Intent myIntent = new Intent(this, Login.class);
             startActivity(myIntent);
@@ -70,5 +74,8 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    public void changeActionBarText (String title) {
+        getSupportActionBar().setTitle(title);
+    }
 
 }

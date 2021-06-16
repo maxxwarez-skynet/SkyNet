@@ -1,4 +1,4 @@
-package in.co.maxxwarez.skynet.ui.fragments;
+package in.co.maxxwarez.skynet.ui.commons;
 
 import android.os.Bundle;
 
@@ -13,17 +13,18 @@ import in.co.maxxwarez.skynet.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NoHomeSet#newInstance} factory method to
+ * Use the {@link NoSetUp#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NoHomeSet extends Fragment {
- TextView mTextView;
-    public NoHomeSet () {
+public class NoSetUp extends Fragment {
+    public TextView mTextView;
+
+    public NoSetUp () {
         // Required empty public constructor
     }
 
-    public static NoHomeSet newInstance () {
-        NoHomeSet fragment = new NoHomeSet();
+    public static NoSetUp newInstance () {
+        NoSetUp fragment = new NoSetUp();
         return fragment;
     }
 
@@ -36,8 +37,14 @@ public class NoHomeSet extends Fragment {
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_no_home_set, container, false);
-        mTextView = v.findViewById(R.id.noHomeSet);
-        return  v;
+        View v = inflater.inflate(R.layout.fragment_no_setup, container, false);
+        mTextView = v.findViewById(R.id.noSetUp);
+        Bundle b = getArguments();
+        if (b != null) {
+            String t = b.getString("text");
+            mTextView.setText(t);
+        }
+
+        return v;
     }
 }

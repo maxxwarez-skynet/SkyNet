@@ -5,17 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#5c8acc"
-    tools:context=".ui.fragments.SetUpHome">
+    tools:context=".ui.commons.SetUpButton">
 
 
     <Button
-        android:id="@+id/setHome"
+        android:id="@+id/set_up_button"
         style="@android:style/Widget.Holo.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#5c8acc"
         android:onClick="onClick"
-        android:text="@string/set_home"
         app:iconTint="#5c8acc"
         android:color="#5c8acc"
         app:rippleColor="#c71e34"

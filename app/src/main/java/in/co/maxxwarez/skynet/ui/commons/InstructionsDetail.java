@@ -1,4 +1,4 @@
-package in.co.maxxwarez.skynet.ui.fragments;
+package in.co.maxxwarez.skynet.ui.commons;
 
 import android.os.Bundle;
 
@@ -37,10 +37,17 @@ public class InstructionsDetail extends Fragment {
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
+        Bundle b = getArguments();
+
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_instructions_detail, container, false);
+        View v = inflater.inflate(R.layout.fragment_instructions_detail, container, false);
         TextView t = v.findViewById(R.id.instructions_Details);
         t.setText("Welcome to SkyNet. \n\n  Start your journey to Home Automation and Security. \n \n Set up your home to start configuring your application. Enter a name for your home and add the location. Press the button above to start.");
+
+        if (b != null) {
+            String title = b.getString("text");
+            t.setText(title);
+        }
         return v;
     }
 }

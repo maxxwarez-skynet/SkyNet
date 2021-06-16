@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:textAlignment="center"
-    tools:context=".ui.fragments.NoHomeSet">
+    tools:context=".ui.commons.NoSetUp">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/noHomeSet"
+        android:id="@+id/noSetUp"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:paddingVertical="20dp"
-        android:text="@string/no_home_found"
+        android:text=""
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
         android:textColor="@color/white"

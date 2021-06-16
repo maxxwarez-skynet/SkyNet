@@ -11,13 +11,13 @@
         android:layout_weight="1" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/settingsList"
+        android:id="@+id/home_settings_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/detailsList"
+        android:id="@+id/home_details_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6" />

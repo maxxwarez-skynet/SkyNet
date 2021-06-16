@@ -1,5 +1,6 @@
 package in.co.maxxwarez.skynet.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,8 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
+import in.co.maxxwarez.skynet.MainActivity;
 import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.ui.devices.DeviceFragment;
 
@@ -64,7 +68,12 @@ public class NoDevice extends Fragment implements View.OnClickListener {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
             fragmentTransaction.replace(R.id.nav_host_fragment, deviceFragment).commit();
-            Log.i(TAG, "Clicked Yes " + i);
+            NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+            navigationView.getMenu().getItem(1).setChecked(true);
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.changeActionBarText("Devices");
+            Log.i(TAG, "Clicked Yes ");
+
         }
 
     }

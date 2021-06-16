@@ -106,12 +106,12 @@ public class HomeList extends Fragment implements View.OnClickListener {
                     Overview overview = Overview.newInstance();
                     FragmentManager fragmentManager = getParentFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.detailsList, overview).commit();
+                    fragmentTransaction.replace(R.id.home_details_list, overview).commit();
                 } else {
                     NoDevice noDevice = NoDevice.newInstance();
                     FragmentManager fragmentManager = getParentFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.detailsList, noDevice).commit();
+                    fragmentTransaction.replace(R.id.home_details_list, noDevice).commit();
 
                 }
 

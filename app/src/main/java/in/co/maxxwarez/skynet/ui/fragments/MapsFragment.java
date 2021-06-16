@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.location.Location;
@@ -13,12 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,11 +24,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
-
 import in.co.maxxwarez.skynet.R;
-
-import static android.content.ContentValues.TAG;
+import in.co.maxxwarez.skynet.ui.commons.SetUpButton;
 
 public class MapsFragment extends Fragment  {
     private static final String TAG = "SkyNet";
@@ -51,15 +45,15 @@ public class MapsFragment extends Fragment  {
         @Override
         public void onMapReady (GoogleMap googleMap) {
             FragmentManager fragmentManager = getParentFragmentManager();
-            SetUpHome setUpHome = (SetUpHome) fragmentManager.findFragmentById(R.id.settingsList);
+            SetUpButton setUpButton = (SetUpButton) fragmentManager.findFragmentById(R.id.home_settings_list);
 
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.setMyLocationEnabled(true);
             googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
                 @Override
                 public boolean onMyLocationButtonClick () {
-                    setUpHome.mbutton.setText("Tap on your location");
-                    setUpHome.flag = "";
+                    setUpButton.mbutton.setText("Tap on your location");
+                    setUpButton.flag = "";
                     return false;
                 }
             });
@@ -73,9 +67,9 @@ public class MapsFragment extends Fragment  {
                     googleMap.clear();
                     googleMap.addMarker(new MarkerOptions().position(myLocation).title("Marker at your " + mhomeName));
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
-                    setUpHome.mbutton.setText("Done");
+                    setUpButton.mbutton.setText("Done");
                     Log.i(TAG, "clicked map");
-                    setUpHome.flag = "three";
+                    setUpButton.flag = "three";
 
                 }
             });

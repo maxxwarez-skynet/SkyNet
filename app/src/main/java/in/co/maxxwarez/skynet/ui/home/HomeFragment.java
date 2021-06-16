@@ -1,12 +1,9 @@
 package in.co.maxxwarez.skynet.ui.home;
 
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,16 +18,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-
-import java.util.HashMap;
 
 import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.ui.fragments.DetailList;
 import in.co.maxxwarez.skynet.ui.fragments.HomeList;
-import in.co.maxxwarez.skynet.ui.fragments.InstructionsDetail;
-import in.co.maxxwarez.skynet.ui.fragments.NoHomeSet;
-import in.co.maxxwarez.skynet.ui.fragments.SetUpHome;
+import in.co.maxxwarez.skynet.ui.commons.InstructionsDetail;
+import in.co.maxxwarez.skynet.ui.commons.NoSetUp;
+import in.co.maxxwarez.skynet.ui.commons.SetUpButton;
 import in.co.maxxwarez.skynet.ui.fragments.SettingsList;
 
 public class HomeFragment extends Fragment {
@@ -63,25 +57,37 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
-
-    private void setupHome () {
-        SetUpHome setHome = SetUpHome.newInstance();
+    public void noHomeSet () {
+        NoSetUp noSetUp = NoSetUp.newInstance();
+        Bundle args = new Bundle();
+        args.putString("text", "You don't have a Home setup");
+        noSetUp.setArguments(args);
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.settingsList, setHome).commit();
+        fragmentTransaction.replace(R.id.homeList, noSetUp).commit();
+        setUpButton();
+    }
+
+    private void setUpButton () {
+        SetUpButton setUpButton = SetUpButton.newInstance();
+        Bundle args = new Bundle();
+        args.putString("text", "Set Home");
+        setUpButton.setArguments(args);
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.home_settings_list, setUpButton).commit();
         setUpInstructionsDetail();
     }
 
-    public void noHomeSet(){
-        NoHomeSet noHomeSet = NoHomeSet.newInstance();
+    public void setUpInstructionsDetail () {
+        InstructionsDetail instructionsDetail = InstructionsDetail.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.homeList, noHomeSet).commit();
-        setupHome();
+        fragmentTransaction.replace(R.id.home_details_list, instructionsDetail).commit();
     }
 
-    public void homeSet (){
-        HomeList homeList =  HomeList.newInstance();
+    public void homeSet () {
+        HomeList homeList = HomeList.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.homeList, homeList).commit();
@@ -92,7 +98,7 @@ public class HomeFragment extends Fragment {
         SettingsList settingsList = SettingsList.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.settingsList, settingsList).commit();
+        fragmentTransaction.replace(R.id.home_settings_list, settingsList).commit();
         //detalisList();
     }
 
@@ -100,14 +106,8 @@ public class HomeFragment extends Fragment {
         DetailList detailList = DetailList.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.detailsList, detailList).commit();
+        fragmentTransaction.replace(R.id.home_details_list, detailList).commit();
     }
 
-    public void setUpInstructionsDetail () {
-        InstructionsDetail instructionsDetail = InstructionsDetail.newInstance();
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.detailsList, instructionsDetail).commit();
-    }
 
 }
