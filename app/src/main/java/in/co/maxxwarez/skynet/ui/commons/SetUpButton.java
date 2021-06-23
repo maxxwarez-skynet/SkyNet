@@ -1,13 +1,21 @@
 package in.co.maxxwarez.skynet.ui.commons;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import in.co.maxxwarez.skynet.Home;
 import in.co.maxxwarez.skynet.MainActivity;
 import in.co.maxxwarez.skynet.R;
+import in.co.maxxwarez.skynet.ui.devices.NewDeviceSetup;
 import in.co.maxxwarez.skynet.ui.fragments.MapsFragment;
 import in.co.maxxwarez.skynet.ui.fragments.SetHomeDetail;
 
@@ -32,10 +41,12 @@ import in.co.maxxwarez.skynet.ui.fragments.SetHomeDetail;
  */
 public class SetUpButton extends Fragment implements View.OnClickListener {
     private static final String TAG = "SkyNet";
+    private static String sID = "SkyNet-AutoConfig";
     public Button mbutton;
     public String flag = "one";
     public String homeName;
     public int selected = 0;
+    public String mSSID;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public SetUpButton () {
@@ -52,28 +63,25 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public View onCreateView (LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_set_up_button, container, false);
-        mbutton = view.findViewById(R.id.set_up_button);
-        Bundle b = getArguments();
-        if (b != null) {
-            String t = b.getString("text");
-            mbutton.setText(t);
-        }
-        if (b.get("flag") != null) {
-            flag = (String) b.get("flag");
-            Log.i(TAG, "no  flag" + b.get("flag"));
-        }
-        if (b.get("text") != null) {
-            Log.i(TAG, "The Key");
-        }
+    Handler handler = new Handler();
+    Runnable checkSettingOn = new Runnable() {
 
-        mbutton.setOnClickListener(this);
-        return view;
-    }
+        @Override
+        //@TargetApi(23)
+        public void run () {
+            Log.i(TAG, "run: 2");
+            if (isConnected()) {
+                Log.i(TAG, "run: 3");
+                mbutton.setText(mSSID);
+                NewDeviceSetup newDeviceSetup = new NewDeviceSetup();
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.device_details_list, newDeviceSetup).commit();
+                return;
+            }
+            handler.postDelayed(this, 200);
+        }
+    };
 
 
     @Override
@@ -82,40 +90,28 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         clicked();
     }
 
-    private void clicked () {
-        Log.i(TAG, "clicked " + flag);
-        if(flag == "one"){
-            SetHomeDetail setHomeDetail = SetHomeDetail.newInstance();
-            FragmentManager fragmentManager = getParentFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-            fragmentTransaction.add(R.id.home_details_list, setHomeDetail).commit();
-        }
-        if(flag == "two") {
-            Log.i(TAG, "clicked two " + flag);
-            MapsFragment mapsFragment = new MapsFragment();
-            FragmentManager fragmentManager = getParentFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-            fragmentTransaction.add(R.id.home_details_list, mapsFragment).commit();
-            FragmentManager fm = getParentFragmentManager();
-            fm.findFragmentById(R.id.homeList);
-            NoSetUp noSetUp = (NoSetUp) fm.findFragmentById(R.id.homeList);
-            noSetUp.mTextView.setText("Set Location for your home");
-            FragmentManager fragmentManager1 = getParentFragmentManager();
-            SetUpButton setUpButton = (SetUpButton) fragmentManager1.findFragmentById(R.id.home_settings_list);
-            setUpButton.mbutton.setText("Press the Locate Me button to get your location");
+    @Override
+    public View onCreateView (LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_set_up_button, container, false);
+        mbutton = view.findViewById(R.id.set_up_button);
+        Bundle b = getArguments();
+        if (b != null) {
+            if (b.get("flag") != null) {
+                flag = b.getString("flag");
+                Log.i(TAG, "no  flag" + b.get("flag"));
+            }
+            if (b.get("text") != null) {
+                mbutton.setText(b.getString("text"));
+                Log.i(TAG, "The Key");
+            }
 
         }
-        if (flag == "three") {
-            Log.i(TAG, "clicked three " + flag);
-            updateFirebase Fbase = new updateFirebase();
-            Fbase.execute();
-        }
 
-        if (flag == "four") {
-            Log.i(TAG, "clicked four " + flag);
-        }
+
+        mbutton.setOnClickListener(this);
+        return view;
     }
 
     public void remoteEvent (String next){
@@ -171,6 +167,101 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         protected void onPostExecute (String result) {
             Intent i = new Intent(getActivity(), MainActivity.class);
             startActivity(i);
+        }
+    }
+
+    @Override
+    public void onResume () {
+
+        super.onResume();
+        Log.i(TAG, "onResume ");
+    }
+
+    private void clicked () {
+        Log.i(TAG, "clicked " + flag);
+        if (flag == "one") {
+            SetHomeDetail setHomeDetail = SetHomeDetail.newInstance();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+            fragmentTransaction.add(R.id.home_details_list, setHomeDetail).commit();
+        }
+        if (flag == "two") {
+            Log.i(TAG, "clicked two " + flag + " " + checkLocationPermission());
+            if (checkLocationPermission()) {
+                Log.i(TAG, "Inside checkLocationPermission True ");
+                MapsFragment mapsFragment = new MapsFragment();
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                fragmentTransaction.add(R.id.home_details_list, mapsFragment).commit();
+                FragmentManager fm = getParentFragmentManager();
+                fm.findFragmentById(R.id.homeList);
+                NoSetUp noSetUp = (NoSetUp) fm.findFragmentById(R.id.homeList);
+                noSetUp.mTextView.setText("Set Location for your home");
+                FragmentManager fragmentManager1 = getParentFragmentManager();
+                SetUpButton setUpButton = (SetUpButton) fragmentManager1.findFragmentById(R.id.home_settings_list);
+                setUpButton.mbutton.setText("Press the Locate Me button to get your location");
+            } else {
+                Log.i(TAG, "Inside checkLocationPermission False ");
+                ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
+        }
+        if (flag == "three") {
+            Log.i(TAG, "clicked three " + flag);
+            updateFirebase Fbase = new updateFirebase();
+            Fbase.execute();
+        }
+
+        if (flag == "four") {
+            Log.i(TAG, "clicked four " + flag);
+            Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
+            startActivity(panelIntent);
+            handler.postDelayed(checkSettingOn, 1000);
+        }
+    }
+
+    private boolean isConnected () {
+        boolean status = false;
+
+        WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+
+        mSSID = wifiInfo.getBSSID();
+        Log.i(TAG, "Inside getCurrentSSID " + wifiInfo.getSSID() + " " + mSSID);
+
+        if (mSSID.equals(sID)) {
+            //if(mSSID.equals("\"AndroidWifi\"")){
+            Log.i(TAG, "IF " + mSSID);
+            status = true;
+        }
+
+        return status;
+    }
+
+    public boolean checkLocationPermission () {
+        String permission = "android.permission.ACCESS_FINE_LOCATION";
+        int res = this.getActivity().checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
+    }
+
+    public void onRequestPermissionsResult (int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG, "Inside case 1 ");
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Log.i(TAG, "Inside case 2 ");
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 
