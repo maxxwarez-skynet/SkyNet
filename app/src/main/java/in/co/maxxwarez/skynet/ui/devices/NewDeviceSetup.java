@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +85,21 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Handler handler = new Handler();
+        Runnable checkSettingOn = new Runnable() {
+
+            @Override
+
+            public void run () {
+                Log.i(TAG, "run: 2");
+                if (isConnected()) {
+                    Log.i(TAG, "run: 3");
+                    return;
+                }
+                handler.postDelayed(this, 200);
+            }
+        };
+        handler.postDelayed(checkSettingOn, 1000);
         Log.i(TAG, "OnCreate");
 
     }
@@ -94,30 +110,23 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
         Log.i(TAG, "onCreateView");
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_new_device_setup, container, false);
-        Log.i(TAG, getCurrentSSID());
         webView = v.findViewById(R.id.autoConfig);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new NewDeviceSetUp.WebAppInterface(this.getContext()), "AndroidFunction");
         loadPage();
+        getData();
+
         return v;
     }
+
 
     @Override
     public void onClick (View v) {
 
     }
 
-
-    public String getCurrentSSID () {
-        Log.i(TAG, "Inside getCurrentSSID");
-        mSSID = "Not Connected";
-        WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        mSSID = wifiInfo.getSSID();
-        return mSSID;
-    }
 
     private void loadPage () {
         Log.i(TAG, "My Logger loadPage: ");
@@ -172,5 +181,24 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
         return (result);
 
 
+    }
+
+    private boolean isConnected () {
+        boolean status = false;
+
+        WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+
+        mSSID = wifiInfo.getSSID();
+        Log.i(TAG, "Inside getCurrentSSID " + wifiInfo.getSSID());
+
+        if (mSSID.equals("\"SkyNet-AutoConfig\"")) {
+            //if(mSSID.equals("\"AndroidWifi\"")){
+            Log.i(TAG, "IF " + mSSID);
+            status = false;
+        } else
+            status = true;
+
+        return status;
     }
 }

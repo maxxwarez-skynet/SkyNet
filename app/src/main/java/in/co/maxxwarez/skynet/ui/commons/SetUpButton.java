@@ -67,21 +67,17 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
     Runnable checkSettingOn = new Runnable() {
 
         @Override
-        //@TargetApi(23)
         public void run () {
             Log.i(TAG, "run: 2");
             if (isConnected()) {
                 Log.i(TAG, "run: 3");
                 mbutton.setText(mSSID);
-                NewDeviceSetup newDeviceSetup = new NewDeviceSetup();
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.device_details_list, newDeviceSetup).commit();
                 return;
             }
             handler.postDelayed(this, 200);
         }
     };
+
 
 
     @Override
@@ -145,36 +141,18 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         }
     }
 
-    class updateFirebase2 extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground (String... strings) {
-
-            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-            String userID = user.getUid();
-            Home home = new Home(homeName, userID, 0);
-            ref.child("homes").push().setValue(home);
-            // String homeID = ref.child("homes").push().getKey();
-            // ref.child("users").child(user.getUid()).child("homes").child(homeID).setValue(homeName);
-            // ref.child("homes").child(homeID).child("name").setValue(homeName);
-            // ref.child("homes").child(homeID).child("userID").setValue(userID);
-            //ToDo: Add query to check and update order.:Can be handled in functions
-            // ref.child("homes").child(homeID).child("order").setValue("");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute (String result) {
-            Intent i = new Intent(getActivity(), MainActivity.class);
-            startActivity(i);
-        }
-    }
-
     @Override
     public void onResume () {
 
         super.onResume();
         Log.i(TAG, "onResume ");
+        if (isConnected()) {
+            NewDeviceSetup newDeviceSetup = new NewDeviceSetup();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.device_details_list, newDeviceSetup).commit();
+
+        }
     }
 
     private void clicked () {
@@ -216,6 +194,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         if (flag == "four") {
             Log.i(TAG, "clicked four " + flag);
             Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
+            panelIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(panelIntent);
             handler.postDelayed(checkSettingOn, 1000);
         }
@@ -227,10 +206,10 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 
-        mSSID = wifiInfo.getBSSID();
-        Log.i(TAG, "Inside getCurrentSSID " + wifiInfo.getSSID() + " " + mSSID);
+        mSSID = wifiInfo.getSSID();
+        Log.i(TAG, "Inside getCurrentSSID " + wifiInfo.getSSID());
 
-        if (mSSID.equals(sID)) {
+        if (mSSID.equals("\"SkyNet-AutoConfig\"")) {
             //if(mSSID.equals("\"AndroidWifi\"")){
             Log.i(TAG, "IF " + mSSID);
             status = true;
