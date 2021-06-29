@@ -60,6 +60,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import in.co.maxxwarez.skynet.Home;
+import in.co.maxxwarez.skynet.MainActivity;
 import in.co.maxxwarez.skynet.NewDeviceSetUp;
 import in.co.maxxwarez.skynet.R;
 
@@ -85,21 +87,6 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Handler handler = new Handler();
-        Runnable checkSettingOn = new Runnable() {
-
-            @Override
-
-            public void run () {
-                Log.i(TAG, "run: 2");
-                if (isConnected()) {
-                    Log.i(TAG, "run: 3");
-                    return;
-                }
-                handler.postDelayed(this, 200);
-            }
-        };
-        handler.postDelayed(checkSettingOn, 1000);
         Log.i(TAG, "OnCreate");
 
     }
@@ -111,28 +98,26 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_new_device_setup, container, false);
         webView = v.findViewById(R.id.autoConfig);
-        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webView.addJavascriptInterface(new NewDeviceSetUp.WebAppInterface(this.getContext()), "AndroidFunction");
+        //webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+        //WebSettings webSettings = webView.getSettings();
+        //  webSettings.setJavaScriptEnabled(true);
+        //webView.addJavascriptInterface(new NewDeviceSetUp.WebAppInterface(this.getContext()), "AndroidFunction");
         loadPage();
-        getData();
-
+        getChip chip = new getChip();
+        chip.execute();
         return v;
     }
-
 
     @Override
     public void onClick (View v) {
 
     }
 
-
     private void loadPage () {
         Log.i(TAG, "My Logger loadPage: ");
-        //chipID = getData();
 
-        webView.loadUrl("http://192.168.4.1/");
+
+        webView.loadUrl("http://192.168.4.1/c");
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading (WebView view, String request) {
@@ -140,65 +125,55 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
                 return false;
             }
         });
-
     }
 
-    public String getData () {
-        java.net.HttpURLConnection urlConnection = null;
-        String result = "";
-        try {
-            URL url = new URL("http://192.168.4.1/c");
-            urlConnection = (HttpURLConnection) url.openConnection();
+    class getChip extends AsyncTask<String, Void, String> {
 
-            int code = urlConnection.getResponseCode();
-            //Log.d(TAG, "My Logger ChipID 4 " + code);
+        @Override
+        protected String doInBackground (String... strings) {
+            java.net.HttpURLConnection urlConnection = null;
+            String result = "";
+            try {
+                URL url = new URL("http://192.168.4.1/c");
+                urlConnection = (HttpURLConnection) url.openConnection(
+                );
 
-            if (code == 200) {
-                //Log.d(TAG, "My Logger ChipID 5 " + code);
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                if (in != null) {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-                    String line = "";
+                int code = urlConnection.getResponseCode();
+                Log.i(TAG, "My Logger ChipID 4 " + code);
 
-                    while ((line = bufferedReader.readLine()) != null)
-                        result += line;
+                if (code == 200) {
+                    Log.i(TAG, "My Logger ChipID 5 " + code);
+                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                    if (in != null) {
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+                        String line = "";
+
+                        while ((line = bufferedReader.readLine()) != null)
+                            result += line;
+                    }
+                    in.close();
+                    //registerDevice(result);
                 }
-                in.close();
-                //registerDevice(result);
+                Log.i(TAG, "My Logger ChipID 6 " + result);
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                urlConnection.disconnect();
+                //Log.d(TAG, "My Logger ChipID 2 " + result);
+                //registerDevice("13304107");
             }
-            //Log.d(TAG, "My Logger ChipID 6 " + result);
-
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            urlConnection.disconnect();
-            //Log.d(TAG, "My Logger ChipID 2 " + result);
-            //registerDevice("13304107");
+            return result;
         }
-        return (result);
 
-
+        @Override
+        protected void onPostExecute (String result) {
+            chipID = result;
+            mSSID = result;
+        }
     }
 
-    private boolean isConnected () {
-        boolean status = false;
-
-        WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-
-        mSSID = wifiInfo.getSSID();
-        Log.i(TAG, "Inside getCurrentSSID " + wifiInfo.getSSID());
-
-        if (mSSID.equals("\"SkyNet-AutoConfig\"")) {
-            //if(mSSID.equals("\"AndroidWifi\"")){
-            Log.i(TAG, "IF " + mSSID);
-            status = false;
-        } else
-            status = true;
-
-        return status;
-    }
 }

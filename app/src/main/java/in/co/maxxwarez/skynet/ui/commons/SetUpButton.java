@@ -194,9 +194,16 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         if (flag == "four") {
             Log.i(TAG, "clicked four " + flag);
             Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
-            panelIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            //panelIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(panelIntent);
             handler.postDelayed(checkSettingOn, 1000);
+        }
+
+        if (flag == "fours") {
+            NewDeviceSetup newDeviceSetup = new NewDeviceSetup();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.device_details_list, newDeviceSetup).commit();
         }
     }
 
