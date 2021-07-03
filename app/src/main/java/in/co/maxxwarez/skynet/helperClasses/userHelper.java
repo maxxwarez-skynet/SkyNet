@@ -1,4 +1,4 @@
-package in.co.maxxwarez.skynet;
+package in.co.maxxwarez.skynet.helperClasses;
 
 import android.util.Log;
 import android.view.View;

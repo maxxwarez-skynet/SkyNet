@@ -28,7 +28,7 @@ public class DeviceFragment extends Fragment {
     private final static String TAG = "SkyNet";
     final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    Query query = ref.child("users").child(user.getUid()).child("devices");
+    Query query = ref.child("users").child(user.getUid()).child("deviceID");
 
     public View onCreateView (@NonNull LayoutInflater inflater,
                               ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +54,26 @@ public class DeviceFragment extends Fragment {
     }
 
     private void device_yes () {
+        DeviceList deviceList = new DeviceList();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        fragmentTransaction.replace(R.id.deviceList, deviceList).commit();
+        deviceSettingsList();
+
+    }
+
+    private void deviceSettingsList () {
+        DeviceSettingsList deviceSettingsList = new DeviceSettingsList();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        fragmentTransaction.replace(R.id.device_settings_list, deviceSettingsList).commit();
+        ;
+        deviceDetailsList();
+    }
+
+    private void deviceDetailsList () {
     }
 
 

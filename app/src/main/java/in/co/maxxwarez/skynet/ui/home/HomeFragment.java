@@ -21,11 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.ui.fragments.DetailList;
-import in.co.maxxwarez.skynet.ui.fragments.HomeList;
 import in.co.maxxwarez.skynet.ui.commons.InstructionsDetail;
 import in.co.maxxwarez.skynet.ui.commons.NoSetUp;
 import in.co.maxxwarez.skynet.ui.commons.SetUpButton;
-import in.co.maxxwarez.skynet.ui.fragments.SettingsList;
 
 public class HomeFragment extends Fragment {
     private final static String TAG = "SkyNet";
@@ -95,7 +93,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void settingsList () {
-        SettingsList settingsList = SettingsList.newInstance();
+        HomeSettingsList settingsList = HomeSettingsList.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.home_settings_list, settingsList).commit();

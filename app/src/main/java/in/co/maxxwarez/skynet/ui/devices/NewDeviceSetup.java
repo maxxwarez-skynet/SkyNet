@@ -1,49 +1,19 @@
 package in.co.maxxwarez.skynet.ui.devices;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkRequest;
-import android.net.wifi.WifiNetworkSpecifier;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Handler;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.StrictMode;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -58,15 +28,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
-import in.co.maxxwarez.skynet.Home;
-import in.co.maxxwarez.skynet.MainActivity;
-import in.co.maxxwarez.skynet.NewDeviceSetUp;
 import in.co.maxxwarez.skynet.R;
-
-import static android.content.Context.WIFI_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
+import in.co.maxxwarez.skynet.ui.commons.InstructionsDetail;
+import in.co.maxxwarez.skynet.ui.commons.NoSetUp;
+import in.co.maxxwarez.skynet.ui.commons.SetUpButton;
+import in.co.maxxwarez.skynet.ui.home.HomeList;
 
 
 public class NewDeviceSetup extends Fragment implements View.OnClickListener {
@@ -75,6 +42,7 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
     protected WebView webView;
     private String mSSID;
     private String chipID;
+    private FirebaseAuth mAuth;
 
     public NewDeviceSetup () {
     }
@@ -98,10 +66,6 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_new_device_setup, container, false);
         webView = v.findViewById(R.id.autoConfig);
-        //webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
-        //WebSettings webSettings = webView.getSettings();
-        //  webSettings.setJavaScriptEnabled(true);
-        //webView.addJavascriptInterface(new NewDeviceSetUp.WebAppInterface(this.getContext()), "AndroidFunction");
         loadPage();
         getChip chip = new getChip();
         chip.execute();
@@ -114,10 +78,7 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
     }
 
     private void loadPage () {
-        Log.i(TAG, "My Logger loadPage: ");
-
-
-        webView.loadUrl("http://192.168.4.1/c");
+        webView.loadUrl("http://192.168.4.1/");
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading (WebView view, String request) {
@@ -125,6 +86,67 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
                 return false;
             }
         });
+
+        webView.setWebViewClient(new WebViewClient() {
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onReceivedError (WebView view, int errorCode, String description, String failingUrl) {
+                Log.i(TAG, "WebView  error" + errorCode);
+            }
+
+            @Override
+            public void onPageFinished (WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                if (view.getUrl().contains("wifisave?")) {
+                    Log.i(TAG, "WebView Page1 " + view.getUrl());
+                    updateHeader();
+                    updateButton("Done", "five");
+                    updateInstructions("Your device has been activated. When the light starts blinking, click Done");
+                }
+
+                if (view.getUrl().contains("wifi?")) {
+
+                }
+
+
+            }
+
+        });
+
+    }
+
+    private void updateInstructions (String s) {
+        InstructionsDetail instructionsDetail = InstructionsDetail.newInstance();
+        Bundle args = new Bundle();
+        args.putString("text", s);
+        instructionsDetail.setArguments(args);
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.device_details_list, instructionsDetail).commit();
+    }
+
+    private void updateButton (String text, String flag) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        SetUpButton setUpButton = (SetUpButton) fragmentManager.findFragmentById(R.id.device_settings_list);
+        setUpButton.mbutton.setText(text);
+        setUpButton.flag = flag;
+        setUpButton.mChipID = chipID;
+    }
+
+    private void updateHeader () {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        NoSetUp noSetUp = (NoSetUp) fragmentManager.findFragmentById(R.id.deviceList);
+        noSetUp.mTextView.setText("Your DeviceID: " + chipID);
+    }
+
+    private void loadDevicePages () {
+        DeviceList deviceList = DeviceList.newInstance();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.deviceList, deviceList).commit();
+        //settingsList();
     }
 
     class getChip extends AsyncTask<String, Void, String> {
@@ -152,7 +174,6 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
                             result += line;
                     }
                     in.close();
-                    //registerDevice(result);
                 }
                 Log.i(TAG, "My Logger ChipID 6 " + result);
 
@@ -163,8 +184,6 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             } finally {
                 urlConnection.disconnect();
-                //Log.d(TAG, "My Logger ChipID 2 " + result);
-                //registerDevice("13304107");
             }
             return result;
         }
@@ -172,8 +191,9 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute (String result) {
             chipID = result;
-            mSSID = result;
+
         }
     }
+
 
 }

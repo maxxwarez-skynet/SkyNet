@@ -1,12 +1,10 @@
-package in.co.maxxwarez.skynet.ui.fragments;
+package in.co.maxxwarez.skynet.ui.devices;
 
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,20 +24,23 @@ import com.google.firebase.database.ValueEventListener;
 
 import in.co.maxxwarez.skynet.R;
 
-public class HomeList extends Fragment implements View.OnClickListener {
-    private final static String TAG = "SkyNet";
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link DeviceList#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class DeviceList extends Fragment implements View.OnClickListener {
+    private static final String TAG = "SkyNet";
+    public String mDeviceID;
     View mView;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-    public String mHomeID;
 
-    public HomeList () {
+    public DeviceList () {
         // Required empty public constructor
     }
 
-
-    public static HomeList newInstance () {
-        HomeList fragment = new HomeList();
+    public static DeviceList newInstance () {
+        DeviceList fragment = new DeviceList();
         return fragment;
     }
 
@@ -53,29 +54,28 @@ public class HomeList extends Fragment implements View.OnClickListener {
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_home_list, container, false);
+        mView = inflater.inflate(R.layout.fragment_device_list, container, false);
 
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        Query queryHomes = ref.child("users").child(user.getUid()).child("homes");
-        queryHomes.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query queryDevice = ref.child("users").child(user.getUid()).child("deviceID");
+        queryDevice.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange (@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
 
-                    for (DataSnapshot home : dataSnapshot.getChildren()) {
+                    for (DataSnapshot device : dataSnapshot.getChildren()) {
                         Log.i(TAG, "ChildrenCount " + dataSnapshot.getChildrenCount());
                         if (dataSnapshot.getChildrenCount() == 1) {
-                            String HomeID = home.getKey();
-                            mHomeID = HomeID;
-                            checkDevice(mHomeID);
-                            Log.i(TAG, "HomeList 1 " + HomeID + " " + mHomeID);
+                            String deviceID = device.getKey();
+                            mDeviceID = deviceID;
+                            Log.i(TAG, "HomeList 1 " + deviceID + " " + mDeviceID);
                         } else {
                             //ToDo: Look for Order and set homeID with order = 0
                         }
-                        String buttonID = home.getKey();
-                        String buttonName = (String) home.getValue();
-                        createHomes(buttonID, buttonName);
+                        String buttonID = device.getKey();
+                        String buttonName = (String) device.getValue();
+                        createDevice(buttonID, buttonName);
                         // createDevice(buttonID, buttonName);
 
 
@@ -95,41 +95,8 @@ public class HomeList extends Fragment implements View.OnClickListener {
         return mView;
     }
 
-    private void checkDevice (String HomeID) {
-        Log.i(TAG, "HomeList 2 " + HomeID);
-        Query queryHomes = ref.child("homes").child(HomeID).child("devices");
-        queryHomes.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange (@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Overview overview = Overview.newInstance();
-                    FragmentManager fragmentManager = getParentFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.home_details_list, overview).commit();
-                } else {
-                    NoDevice noDevice = NoDevice.newInstance();
-                    FragmentManager fragmentManager = getParentFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.home_details_list, noDevice).commit();
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled (DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void fragmentLoader (String fragmentName) {
-
-    }
-
-    private void createHomes (String buttonID, String buttonName) {
-        LinearLayout layout = (LinearLayout) mView.findViewById(R.id.home_icons);
+    private void createDevice (String buttonID, String buttonName) {
+        LinearLayout layout = (LinearLayout) mView.findViewById(R.id.device_icons);
         Button myDevice = new Button(getContext());
         myDevice.setText(buttonName);
         myDevice.setClickable(true);
@@ -149,17 +116,19 @@ public class HomeList extends Fragment implements View.OnClickListener {
         layout.addView(myDevice, layoutParams);
 
     }
-    View.OnClickListener handleOnClickHome(final String buttonID, final String buttonName){
+
+    View.OnClickListener handleOnClickHome (final String buttonID, final String buttonName) {
         return new View.OnClickListener() {
-            public void onClick(View v) {
-                homeClick (buttonID, buttonName);
+            public void onClick (View v) {
+                deviceClick(buttonID, buttonName);
             }
 
         };
     }
-    private void homeClick(String buttonID, String buttonName){
+
+    private void deviceClick (String buttonID, String buttonName) {
         Log.i(TAG, "Clicked" + buttonID + " " + buttonName);
-        mHomeID = buttonID;
+        mDeviceID = buttonID;
 
     }
 
@@ -168,6 +137,4 @@ public class HomeList extends Fragment implements View.OnClickListener {
     public void onClick (View v) {
 
     }
-
-
 }

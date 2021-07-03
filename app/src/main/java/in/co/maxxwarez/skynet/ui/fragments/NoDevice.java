@@ -60,8 +60,8 @@ public class NoDevice extends Fragment implements View.OnClickListener {
     public void onClick (View v) {
         int i = v.getId();
         if (i == R.id.device_no)
-
             Log.i(TAG, "Clicked No " + i);
+
         if (i == R.id.device_yes) {
             DeviceFragment deviceFragment = new DeviceFragment();
             FragmentManager fragmentManager = getParentFragmentManager();

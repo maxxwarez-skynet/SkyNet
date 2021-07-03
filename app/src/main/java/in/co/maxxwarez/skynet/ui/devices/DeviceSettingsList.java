@@ -1,4 +1,4 @@
-package in.co.maxxwarez.skynet.ui.fragments;
+package in.co.maxxwarez.skynet.ui.devices;
 
 import android.os.Bundle;
 
@@ -10,29 +10,32 @@ import android.view.ViewGroup;
 
 import in.co.maxxwarez.skynet.R;
 
-public class SettingsList extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link DeviceSettingsList#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class DeviceSettingsList extends Fragment {
 
-    public SettingsList () {
+    public DeviceSettingsList () {
         // Required empty public constructor
     }
 
-
-    // TODO: Rename and change types and number of parameters
-    public static SettingsList newInstance () {
-        SettingsList fragment = new SettingsList();
+    public static DeviceSettingsList newInstance () {
+        DeviceSettingsList fragment = new DeviceSettingsList();
         return fragment;
     }
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_device_settings_list, container, false);
+        return v;
     }
 }

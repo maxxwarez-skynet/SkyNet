@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,9 +26,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import in.co.maxxwarez.skynet.Home;
+import in.co.maxxwarez.skynet.helperClasses.homeHelper;
 import in.co.maxxwarez.skynet.MainActivity;
 import in.co.maxxwarez.skynet.R;
+import in.co.maxxwarez.skynet.ui.devices.DeviceList;
+import in.co.maxxwarez.skynet.ui.devices.DeviceSettingsList;
 import in.co.maxxwarez.skynet.ui.devices.NewDeviceSetup;
 import in.co.maxxwarez.skynet.ui.fragments.MapsFragment;
 import in.co.maxxwarez.skynet.ui.fragments.SetHomeDetail;
@@ -47,6 +48,8 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
     public String homeName;
     public int selected = 0;
     public String mSSID;
+    public String mChipID;
+
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public SetUpButton () {
@@ -63,7 +66,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
-    Handler handler = new Handler();
+    //Handler handler = new Handler();
     Runnable checkSettingOn = new Runnable() {
 
         @Override
@@ -74,7 +77,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
                 mbutton.setText(mSSID);
                 return;
             }
-            handler.postDelayed(this, 200);
+            //handler.postDelayed(this, 200);
         }
     };
 
@@ -116,45 +119,6 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
 
     }
 
-    class updateFirebase extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-            String userID  = user.getUid();
-            Home home = new Home(homeName, userID, 0);
-            ref.child("homes").push().setValue(home);
-            // String homeID = ref.child("homes").push().getKey();
-            // ref.child("users").child(user.getUid()).child("homes").child(homeID).setValue(homeName);
-            // ref.child("homes").child(homeID).child("name").setValue(homeName);
-            // ref.child("homes").child(homeID).child("userID").setValue(userID);
-            //ToDo: Add query to check and update order.:Can be handled in functions
-            // ref.child("homes").child(homeID).child("order").setValue("");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute (String result) {
-            Intent i = new Intent(getActivity(), MainActivity.class);
-            startActivity(i);
-        }
-    }
-
-    @Override
-    public void onResume () {
-
-        super.onResume();
-        Log.i(TAG, "onResume ");
-        if (isConnected()) {
-            NewDeviceSetup newDeviceSetup = new NewDeviceSetup();
-            FragmentManager fragmentManager = getParentFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.device_details_list, newDeviceSetup).commit();
-
-        }
-    }
-
     private void clicked () {
         Log.i(TAG, "clicked " + flag);
         if (flag == "one") {
@@ -172,7 +136,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                fragmentTransaction.add(R.id.home_details_list, mapsFragment).commit();
+                fragmentTransaction.replace(R.id.home_details_list, mapsFragment).commit();
                 FragmentManager fm = getParentFragmentManager();
                 fm.findFragmentById(R.id.homeList);
                 NoSetUp noSetUp = (NoSetUp) fm.findFragmentById(R.id.homeList);
@@ -196,7 +160,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
             Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
             //panelIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(panelIntent);
-            handler.postDelayed(checkSettingOn, 1000);
+            // handler.postDelayed(checkSettingOn, 1000);
         }
 
         if (flag == "fours") {
@@ -205,6 +169,34 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.device_details_list, newDeviceSetup).commit();
         }
+
+        if (flag == "five") {
+            registerDevice registerDevice = new registerDevice();
+            registerDevice.execute();
+        }
+    }
+
+    @Override
+    public void onResume () {
+
+        super.onResume();
+        Log.i(TAG, "onResume ");
+        if (isConnected()) {
+            NewDeviceSetup newDeviceSetup = new NewDeviceSetup();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.device_details_list, newDeviceSetup).commit();
+
+        }
+    }
+
+    private void deviceList () {
+        DeviceList deviceList = new DeviceList();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        fragmentTransaction.replace(R.id.deviceList, deviceList).commit();
+        deviceSettingsList();
     }
 
     private boolean isConnected () {
@@ -251,4 +243,58 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void deviceSettingsList () {
+        DeviceSettingsList deviceSettingsList = new DeviceSettingsList();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        fragmentTransaction.replace(R.id.device_settings_list, deviceSettingsList).commit();
+        ;
+        deviceDetailsList();
+    }
+
+    private void deviceDetailsList () {
+    }
+
+    class updateFirebase extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground (String... strings) {
+
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            String userID = user.getUid();
+            homeHelper home = new homeHelper(homeName, userID, 0);
+            ref.child("homes").push().setValue(home);
+            // String homeID = ref.child("homes").push().getKey();
+            // ref.child("users").child(user.getUid()).child("homes").child(homeID).setValue(homeName);
+            // ref.child("homes").child(homeID).child("name").setValue(homeName);
+            // ref.child("homes").child(homeID).child("userID").setValue(userID);
+            //ToDo: Add query to check and update order.:Can be handled in functions
+            // ref.child("homes").child(homeID).child("order").setValue("");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute (String result) {
+            Intent i = new Intent(getActivity(), MainActivity.class);
+            startActivity(i);
+        }
+    }
+
+    class registerDevice extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground (String... strings) {
+
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            ref.child("users").child(user.getUid()).child("deviceID").child(mChipID).setValue(mChipID);
+            ref.child("devicUsermap").child(mChipID).setValue(user.getUid());
+            return mChipID;
+        }
+
+        @Override
+        protected void onPostExecute (String result) {
+            deviceList();
+        }
+    }
 }

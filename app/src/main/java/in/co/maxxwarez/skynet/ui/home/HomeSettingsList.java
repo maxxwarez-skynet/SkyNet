@@ -1,4 +1,4 @@
-package in.co.maxxwarez.skynet;
+package in.co.maxxwarez.skynet.ui.home;
 
 import android.os.Bundle;
 
@@ -8,15 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SampleFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class SampleFragment extends Fragment {
+import in.co.maxxwarez.skynet.R;
 
-    public static SampleFragment newInstance () {
-        SampleFragment fragment = new SampleFragment();
+public class HomeSettingsList extends Fragment {
+
+    public HomeSettingsList () {
+        // Required empty public constructor
+    }
+
+
+    // TODO: Rename and change types and number of parameters
+    public static HomeSettingsList newInstance () {
+        HomeSettingsList fragment = new HomeSettingsList();
         return fragment;
     }
 
@@ -30,6 +33,6 @@ public class SampleFragment extends Fragment {
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sample, container, false);
+        return inflater.inflate(R.layout.fragment_home_settings_list, container, false);
     }
 }
