@@ -7,7 +7,7 @@
     android:layout_margin="0px"
     android:background="#8eb2e6"
     android:padding="0px"
-    tools:context=".ui.fragments.SetHomeDetail">
+    tools:context=".ui.home.SetHomeDetail">
 
     <EditText
         android:id="@+id/homeName"

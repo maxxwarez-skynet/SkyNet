@@ -18,7 +18,7 @@ import in.co.maxxwarez.skynet.R;
  */
 public class InstructionsDetail extends Fragment {
 
-TextView mTextView;
+public TextView mTextView;
     public InstructionsDetail () {
         // Required empty public constructor
     }

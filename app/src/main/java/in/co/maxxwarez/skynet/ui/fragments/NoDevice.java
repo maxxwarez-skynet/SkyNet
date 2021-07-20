@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -28,6 +29,7 @@ import in.co.maxxwarez.skynet.ui.devices.DeviceFragment;
  */
 public class NoDevice extends Fragment implements View.OnClickListener {
     private final static String TAG = "SkyNet";
+    public TextView mTextView;
 
     public NoDevice () {
         // Required empty public constructor
@@ -47,12 +49,18 @@ public class NoDevice extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_no_device, container, false);
+        mTextView = v.findViewById(R.id.text_noDevice);
         Button button_yes = v.findViewById(R.id.device_yes);
         Button button_no = v.findViewById(R.id.device_no);
         button_yes.setOnClickListener(this);
         button_no.setOnClickListener(this);
+        Bundle b = this.getArguments();
+        if (b != null) {
+            mTextView.setText(b.getString("message"));
+        }
         return v;
     }
 

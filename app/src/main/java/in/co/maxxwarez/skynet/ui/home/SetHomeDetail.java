@@ -1,4 +1,4 @@
-package in.co.maxxwarez.skynet.ui.fragments;
+package in.co.maxxwarez.skynet.ui.home;
 
 import android.os.Bundle;
 
@@ -17,12 +17,8 @@ import android.widget.EditText;
 
 import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.ui.commons.SetUpButton;
+import in.co.maxxwarez.skynet.ui.fragments.MapsFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SetHomeDetail#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SetHomeDetail extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "SkyNet";

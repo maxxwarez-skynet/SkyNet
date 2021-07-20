@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.ui.fragments.NoDevice;
 import in.co.maxxwarez.skynet.ui.fragments.Overview;
@@ -32,7 +34,7 @@ public class HomeList extends Fragment implements View.OnClickListener {
     private final static String TAG = "SkyNet";
     View mView;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    // final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     public String mHomeID;
 
     public HomeList () {
@@ -58,6 +60,7 @@ public class HomeList extends Fragment implements View.OnClickListener {
         mView = inflater.inflate(R.layout.fragment_home_list, container, false);
 
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        //Query queryHomes = ref.child("users").child(user.getUid()).child("deviceID");
         Query queryHomes = ref.child("users").child(user.getUid()).child("homes");
         queryHomes.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -70,7 +73,7 @@ public class HomeList extends Fragment implements View.OnClickListener {
                         if (dataSnapshot.getChildrenCount() == 1) {
                             String HomeID = home.getKey();
                             mHomeID = HomeID;
-                            checkDevice(mHomeID);
+                            checkHome(mHomeID);
                             Log.i(TAG, "HomeList 1 " + HomeID + " " + mHomeID);
                         } else {
                             //ToDo: Look for Order and set homeID with order = 0
@@ -78,13 +81,9 @@ public class HomeList extends Fragment implements View.OnClickListener {
                         String buttonID = home.getKey();
                         String buttonName = (String) home.getValue();
                         createHomes(buttonID, buttonName);
-                        // createDevice(buttonID, buttonName);
-
-
                         Log.i(TAG, "Key " + buttonID + " Value " + buttonName);
                     }
                 }
-
             }
 
             @Override
@@ -92,28 +91,63 @@ public class HomeList extends Fragment implements View.OnClickListener {
 
             }
         });
-
-
         return mView;
     }
 
-    private void checkDevice (String HomeID) {
+    private void checkHome (String HomeID) {
         Log.i(TAG, "HomeList 2 " + HomeID);
-        Query queryHomes = ref.child("homes").child(HomeID).child("devices");
+        final DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference();
+        Query queryHomes = ref2.child("homes").child(HomeID).child("devices");
+        Log.i(TAG, "HomeList 3 " + queryHomes);
         queryHomes.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange (@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    Log.i(TAG, "HomeList 001 ");
                     Overview overview = Overview.newInstance();
                     FragmentManager fragmentManager = getParentFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.home_details_list, overview).commit();
                 } else {
-                    NoDevice noDevice = NoDevice.newInstance();
-                    FragmentManager fragmentManager = getParentFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.home_details_list, noDevice).commit();
+                    Log.i(TAG, "HomeList 002 ");
+                    String userid = user.getUid();
+                    final DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference();
+                    Query queryDevices = ref3.child("users").child(userid).child("deviceID");
+                    Log.i(TAG, "HomeList 003 " + queryDevices);
+                    queryDevices.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange (@NotNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                Log.i(TAG, "Q1 if ");
+                                for (DataSnapshot device : snapshot.getChildren()) {
+                                    Log.i(TAG, "Q1 if key " + device.getKey());
+                                }
+                                NoDevice noDevice = NoDevice.newInstance();
+                                Bundle args = new Bundle();
+                                args.putString("message", "You dont have a device attached to Home. \nYou have a device registered. \nDo you want to attach the device to Home? ");
+                                noDevice.setArguments(args);
+                                FragmentManager fragmentManager = getParentFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.home_details_list, noDevice).commit();
+                            } else {
+                                Log.i(TAG, "Q1 else " + user.getUid());
+                                NoDevice noDevice = NoDevice.newInstance();
+                                Bundle args = new Bundle();
+                                args.putString("message", "You dont have a device registered. \nIf you have a device, power it on and press Yes to register");
+                                noDevice.setArguments(args);
+                                FragmentManager fragmentManager = getParentFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.home_details_list, noDevice).commit();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled (@NonNull @NotNull DatabaseError error) {
+
+                        }
+                    });
+
 
                 }
 

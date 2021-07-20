@@ -33,7 +33,7 @@ import in.co.maxxwarez.skynet.ui.devices.DeviceList;
 import in.co.maxxwarez.skynet.ui.devices.DeviceSettingsList;
 import in.co.maxxwarez.skynet.ui.devices.NewDeviceSetup;
 import in.co.maxxwarez.skynet.ui.fragments.MapsFragment;
-import in.co.maxxwarez.skynet.ui.fragments.SetHomeDetail;
+import in.co.maxxwarez.skynet.ui.home.SetHomeDetail;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -174,6 +174,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
             registerDevice registerDevice = new registerDevice();
             registerDevice.execute();
         }
+
     }
 
     @Override

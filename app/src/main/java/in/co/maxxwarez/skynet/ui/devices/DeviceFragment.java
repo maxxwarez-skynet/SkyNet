@@ -1,6 +1,7 @@
 package in.co.maxxwarez.skynet.ui.devices;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +39,10 @@ public class DeviceFragment extends Fragment {
             @Override
             public void onDataChange (@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    Log.i(TAG, "Device Yes");
                     device_yes();
                 } else {
+                    Log.i(TAG, "Device No");
                     device_no();
                 }
             }
