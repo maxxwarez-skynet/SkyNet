@@ -85,6 +85,7 @@ public class AutomationFragment extends Fragment {
     }
 
     private void logic_yes () {
+        Log.i(TAG, "Automation Yes");
     }
 
     private void logic_no () {

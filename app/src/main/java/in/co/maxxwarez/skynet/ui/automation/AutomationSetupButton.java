@@ -7,7 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Editable;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +28,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import in.co.maxxwarez.skynet.R;
+import in.co.maxxwarez.skynet.helperClasses.automationHelper;
 import in.co.maxxwarez.skynet.ui.commons.InstructionsDetail;
 
 
@@ -45,6 +50,8 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
     private String destDevice;
     private Boolean addState;
 
+    automationHelper automationHelper = new automationHelper();
+
     public AutomationSetupButton () {
         // Required empty public constructor
     }
@@ -57,6 +64,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -147,10 +155,13 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
                 public void onClick (DialogInterface dialog, int which) {
                     if (which == 0) {
                         addState = false;
+                        automationHelper.setState(false);
                     }
                     if (which == 1) {
                         addState = true;
+                        automationHelper.setState(true);
                     }
+
                     String s = "You are almost there! Click Done to complete your automation.";
                     changeInstructions("Done", s, "seven");
                 }
@@ -355,20 +366,24 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
 
 // Set an EditText view to get user input
         final EditText input = new EditText(this.getContext());
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
         alert.setView(input);
-        getSensorValue(new MyCallback() {
+        getSensorValue(new MyCallbackInt() {
 
             @Override
-            public void onCallback (String[] value) {
+            public void onCallback (long[] value) {
 
-                input.setText(value[0]);
+                //input.setText((int) value[0]);
+                input.setText(String.valueOf(value[0]));
             }
         }, sourceDevice);
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick (DialogInterface dialog, int whichButton) {
-                String value = input.getText().toString();
+                String textValue = input.getText().toString();
+                Float value = Float.valueOf(textValue);
                 Log.i(TAG, "Config Pin Value : " + value);
+                automationHelper.setRangeA(value);
                 String s = "Select Your Destination Device";
                 changeInstructions("Select Destination", s, "five");
                 return;
@@ -387,11 +402,11 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
         alert.show();
     }
 
-    public void getSensorValue (final MyCallback myCallback, String s) {
+    public void getSensorValue (final MyCallbackInt myCallback, String s) {
         String ip = addInput;
         Log.i(TAG, "getSensorValue " + s);
         ///final ArrayList<String> result = new ArrayList<>();
-        final String[] result = new String[1];
+        final long[] result = new long[1];
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         Query query = ref.child("Device").child(s).child("Data").child(ip);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -405,7 +420,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
                     // result.add(dataSnapshots.getValue().toString());
                     {
                         Log.i(TAG, "Value is 0 " + dataSnapshots.getValue());
-                        result[0] = String.valueOf(dataSnapshots.getValue());
+                        result[0] = (long) dataSnapshots.getValue();
                         Log.i(TAG, "Value is 1 " + result[0]);
                         // Log.i(TAG,"Value is " + dataSnapshots.getValue() + result[0]);
                     }
@@ -429,18 +444,23 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
             @Override
             public void onClick (DialogInterface dialog, int which) {
                 if (which == 0) {
+                    automationHelper.setOperator(0);
                     mOperatorType = 0;
                 }
                 if (which == 1) {
+                    automationHelper.setOperator(-1);
                     mOperatorType = -1;
                 }
                 if (which == 2) {
+                    automationHelper.setOperator(1);
                     mOperatorType = 1;
                 }
                 if (which == 3) {
+                    automationHelper.setOperator(2);
                     mOperatorType = 2;
                 }
                 operatorType = (list[which]);
+
                 String s = "Select the value for " + addInputType;
                 changeInstructions("Set Value ", s, "four");
             }
@@ -479,6 +499,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
             @Override
             public void onClick (DialogInterface dialog, int which) {
                 destDevice = list[which];
+                automationHelper.setDevice(list[which]);
                 getSWList(new MyCallback() {
 
                     @Override
@@ -502,6 +523,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
             public void onClick (DialogInterface dialog, int which) {
                 Log.i(TAG, "Config: Selection " + list[which]);
                 addOP = list[which];
+                automationHelper.setNode(list[which]);
                 String s = "Set the state of " + addOP;
                 changeInstructions("Set State", s, "six");
             }
@@ -513,7 +535,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
         //TODO Add Update to Firebase DB
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         String logicID = ref.child("logics").push().getKey();
-        ref.child("logics").child(logicID).child("test").setValue("test");
+        ref.child("logics").child(logicID).setValue(automationHelper);
         Log.i(TAG, "Config Push " + logicID + " " + addInputType);
         if (addInputType == "Switch") {
             logicID = ref.child("logic").push().getKey();
@@ -524,12 +546,20 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
             ref.child("Device").child(sourceDevice).child("Data").child(addInput).child("logic").child(logicID).setValue(true);
             Log.i(TAG, "Config Logic Value SR: " + destDevice + " " + addOP + " " + " " + logicID);
         }
-
+        AutomationFragment automationFragment = new AutomationFragment();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment, automationFragment).commit();
 
     }
 
+
     public interface MyCallback {
         void onCallback (String[] value);
+    }
+
+    public interface MyCallbackInt {
+        void onCallback (long[] value);
     }
 
 }
