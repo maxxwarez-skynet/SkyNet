@@ -116,5 +116,7 @@
     <string name="button">Yes</string>
     <string name="you_don_t_have_a_device_added_if_you_have_a_devce_click_above">You don\'t have a Device added. If you have a devce click Above.</string>
     <string name="no">No</string>
+    <string name="attached_devices">Attached Devices</string>
+    <string name="available_devices">Available Devices</string>
 
 </resources>

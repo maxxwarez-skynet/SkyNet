@@ -29,7 +29,7 @@ import in.co.maxxwarez.skynet.R;
  * Use the {@link DeviceList#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeviceList extends Fragment implements View.OnClickListener {
+public class DeviceList extends Fragment {
     private static final String TAG = "SkyNet";
     public String mDeviceID;
     View mView;
@@ -132,9 +132,4 @@ public class DeviceList extends Fragment implements View.OnClickListener {
 
     }
 
-
-    @Override
-    public void onClick (View v) {
-
-    }
 }

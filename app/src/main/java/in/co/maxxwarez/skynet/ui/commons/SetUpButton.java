@@ -250,7 +250,6 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         fragmentTransaction.replace(R.id.device_settings_list, deviceSettingsList).commit();
-        ;
         deviceDetailsList();
     }
 

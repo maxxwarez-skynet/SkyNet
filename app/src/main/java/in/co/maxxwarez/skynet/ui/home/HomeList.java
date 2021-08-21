@@ -30,7 +30,7 @@ import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.ui.fragments.NoDevice;
 import in.co.maxxwarez.skynet.ui.fragments.Overview;
 
-public class HomeList extends Fragment implements View.OnClickListener {
+public class HomeList extends Fragment {
     private final static String TAG = "SkyNet";
     View mView;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -71,10 +71,10 @@ public class HomeList extends Fragment implements View.OnClickListener {
                     for (DataSnapshot home : dataSnapshot.getChildren()) {
                         Log.i(TAG, "ChildrenCount " + dataSnapshot.getChildrenCount());
                         if (dataSnapshot.getChildrenCount() == 1) {
-                            String HomeID = home.getKey();
-                            mHomeID = HomeID;
+                            mHomeID = home.getKey();
+                            // mHomeID = HomeID;
                             checkHome(mHomeID);
-                            Log.i(TAG, "HomeList 1 " + HomeID + " " + mHomeID);
+                            Log.i(TAG, "HomeList 1 " + " " + mHomeID);
                         } else {
                             //ToDo: Look for Order and set homeID with order = 0
                         }
@@ -126,6 +126,7 @@ public class HomeList extends Fragment implements View.OnClickListener {
                                 NoDevice noDevice = NoDevice.newInstance();
                                 Bundle args = new Bundle();
                                 args.putString("message", "You dont have a device attached to Home. \nYou have a device registered. \nDo you want to attach the device to Home? ");
+                                args.putBoolean("device", true);
                                 noDevice.setArguments(args);
                                 FragmentManager fragmentManager = getParentFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -135,6 +136,7 @@ public class HomeList extends Fragment implements View.OnClickListener {
                                 NoDevice noDevice = NoDevice.newInstance();
                                 Bundle args = new Bundle();
                                 args.putString("message", "You dont have a device registered. \nIf you have a device, power it on and press Yes to register");
+                                args.putBoolean("device", false);
                                 noDevice.setArguments(args);
                                 FragmentManager fragmentManager = getParentFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -185,10 +187,12 @@ public class HomeList extends Fragment implements View.OnClickListener {
         layout.addView(myHome, layoutParams);
 
     }
-    View.OnClickListener handleOnClickHome(final String buttonID, final String buttonName){
+    View.OnClickListener handleOnClickHome(final String buttonID, final String buttonName) {
+
+        mHomeID = buttonID;
         return new View.OnClickListener() {
-            public void onClick(View v) {
-                homeClick (buttonID, buttonName);
+            public void onClick (View v) {
+                homeClick(buttonID, buttonName);
             }
 
         };
@@ -198,12 +202,5 @@ public class HomeList extends Fragment implements View.OnClickListener {
         mHomeID = buttonID;
 
     }
-
-
-    @Override
-    public void onClick (View v) {
-
-    }
-
 
 }

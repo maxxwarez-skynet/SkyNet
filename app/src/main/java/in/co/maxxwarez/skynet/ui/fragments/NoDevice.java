@@ -21,6 +21,7 @@ import com.google.android.material.tabs.TabLayout;
 import in.co.maxxwarez.skynet.MainActivity;
 import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.ui.devices.DeviceFragment;
+import in.co.maxxwarez.skynet.ui.home.DeviceList_Home;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +31,7 @@ import in.co.maxxwarez.skynet.ui.devices.DeviceFragment;
 public class NoDevice extends Fragment implements View.OnClickListener {
     private final static String TAG = "SkyNet";
     public TextView mTextView;
+    public Boolean flag;
 
     public NoDevice () {
         // Required empty public constructor
@@ -60,6 +62,7 @@ public class NoDevice extends Fragment implements View.OnClickListener {
         Bundle b = this.getArguments();
         if (b != null) {
             mTextView.setText(b.getString("message"));
+            flag = b.getBoolean("device");
         }
         return v;
     }
@@ -71,7 +74,19 @@ public class NoDevice extends Fragment implements View.OnClickListener {
             Log.i(TAG, "Clicked No " + i);
 
         if (i == R.id.device_yes) {
-            DeviceFragment deviceFragment = new DeviceFragment();
+            if (flag) {
+                Log.i(TAG, " Attach Device. Show Device List");
+                DeviceList_Home deviceList_home = new DeviceList_Home();
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                fragmentTransaction.replace(R.id.home_details_list, deviceList_home).commit();
+            } else {
+                //To-Do
+                //Setup Device Page
+            }
+
+             /*DeviceFragment deviceFragment = new DeviceFragment();
             FragmentManager fragmentManager = getParentFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
@@ -80,7 +95,7 @@ public class NoDevice extends Fragment implements View.OnClickListener {
             navigationView.getMenu().getItem(1).setChecked(true);
             MainActivity mainActivity = (MainActivity) getActivity();
             mainActivity.changeActionBarText("Devices");
-            Log.i(TAG, "Clicked Yes ");
+            Log.i(TAG, "Clicked Yes ");*/
 
         }
 
