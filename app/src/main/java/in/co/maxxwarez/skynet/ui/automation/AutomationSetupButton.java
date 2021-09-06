@@ -183,7 +183,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
     }
 
     private void alertBuilderIP (final String[] list, String title) {
-
+        Log.i(TAG, "alertBuilderIP");
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle(title);
         builder.setItems(list, new DialogInterface.OnClickListener() {
@@ -205,14 +205,19 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
 
     public void getDeviceList (final MyCallback myCallback) {
         final ArrayList<String> result = new ArrayList<>();
+        String[][] multi = new String[2][];
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         Query query = ref.child("users").child(user.getUid()).child("deviceID");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange (@NonNull DataSnapshot dataSnapshot) {
-
+                int i = 0;
                 for (DataSnapshot dataSnapshots : dataSnapshot.getChildren()) {
+
+                    multi[0][i] = (String) dataSnapshots.getKey();
+                    multi[1][i] = (String) dataSnapshots.getValue();
+                    i++;
                     result.add((String) dataSnapshots.getValue());
                 }
                 String frnames[] = result.toArray(new String[result.size()]);
@@ -232,7 +237,6 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
         builder.setItems(list, new DialogInterface.OnClickListener() {
             @Override
             public void onClick (DialogInterface dialog, int which) {
-
                 alertBuilderSource(list[which]);
                 sourceDevice = list[which];
                 /*getIPList(new MyCallback() {
@@ -329,6 +333,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
     }
 
     public void getSRList (final MyCallback myCallback, String s) {
+        Log.i(TAG, "getSRList " + s);
         final ArrayList<String> result = new ArrayList<>();
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         Query query = ref.child("Device").child(s).child("Data");
