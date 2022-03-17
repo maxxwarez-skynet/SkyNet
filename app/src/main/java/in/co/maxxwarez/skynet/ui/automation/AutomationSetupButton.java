@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.helperClasses.automationHelper;
@@ -205,22 +206,20 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
 
     public void getDeviceList (final MyCallback myCallback) {
         final ArrayList<String> result = new ArrayList<>();
-        String[][] multi = new String[2][];
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         Query query = ref.child("users").child(user.getUid()).child("deviceID");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange (@NonNull DataSnapshot dataSnapshot) {
-                int i = 0;
+                Map<String, String> map = null;
                 for (DataSnapshot dataSnapshots : dataSnapshot.getChildren()) {
-
-                    multi[0][i] = (String) dataSnapshots.getKey();
-                    multi[1][i] = (String) dataSnapshots.getValue();
-                    i++;
-                    result.add((String) dataSnapshots.getValue());
+                    map = (Map) dataSnapshot.getValue();
+                    result.add((String) dataSnapshots.getKey());
+                    Log.i(TAG, "Result " + result);
                 }
                 String frnames[] = result.toArray(new String[result.size()]);
+                Log.i(TAG, String.valueOf(map));
                 myCallback.onCallback(frnames);
             }
 
@@ -238,7 +237,6 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
             @Override
             public void onClick (DialogInterface dialog, int which) {
                 alertBuilderSource(list[which]);
-                sourceDevice = list[which];
                 /*getIPList(new MyCallback() {
 
                     @Override
@@ -254,6 +252,31 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
     }
 
     private void alertBuilderSource (final String s) {
+        Log.i(TAG, "Value of Source " + s);
+        final String[] key = {""};
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mReference = ref.child("users").child(user.getUid()).child("deviceID");
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange (@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Log.i(TAG, "Key= " + ds.getKey() + " Value= " + ds.getValue());
+                    if (ds.getValue().toString() == s) {
+                        key[0] = ds.getKey();
+                        sourceDevice = ds.getKey();
+                        Log.i(TAG, "Key of Source " + key[0]);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled (@NonNull DatabaseError error) {
+
+            }
+        });
+
+
         final String[] list = {"Sensor", "Switch"};
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this.getContext());
         builder.setTitle("Select Channel");
@@ -268,7 +291,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
 
                             alertBuilderIP(value, "Sensor List", "Sensor");
                         }
-                    }, s);
+                    }, key[0]);
                 }
                 if (which == 1) {
                     getSWList(new MyCallback() {
@@ -278,7 +301,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
 
                             alertBuilderIP(value, "Switch List", "Switch");
                         }
-                    }, s);
+                    }, key[0]);
 
                 }
 
@@ -308,6 +331,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
     }
 
     public void getSWList (final MyCallback myCallback, String s) {
+        Log.i(TAG, "getSWList " + s);
         final ArrayList<String> result = new ArrayList<>();
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         Query query = ref.child("Device").child(s).child("State");
@@ -541,6 +565,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         String logicID = ref.child("logics").push().getKey();
         ref.child("logics").child(logicID).setValue(automationHelper);
+        ref.child("users").child(user.getUid()).child(logicID).setValue(logicID);
         Log.i(TAG, "Config Push " + logicID + " " + addInputType);
         if (addInputType == "Switch") {
             logicID = ref.child("logic").push().getKey();

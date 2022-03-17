@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,7 +29,7 @@ public class DeviceList_Home extends Fragment {
     private static final String TAG = "SkyNet";
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     View mView;
-
+    TextView textView;
     public DeviceList_Home () {
         // Required empty public constructor
     }
@@ -71,9 +72,12 @@ public class DeviceList_Home extends Fragment {
                                     Log.i(TAG, "Device Attached to Home " + device.getValue());
 
                                 } else {
+                                    textView = mView.findViewById(R.id.textView8);
+                                    textView.setText("Available Devices");
                                     String buttonID = device.getKey();
                                     String buttonName = (String) device.getValue();
                                     createAvailableDevice(buttonID, buttonName);
+
                                     Log.i(TAG, "Device Not Attached to Home " + device.getValue());
                                 }
 
