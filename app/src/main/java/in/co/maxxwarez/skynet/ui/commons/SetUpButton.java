@@ -264,10 +264,10 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
             String userID = user.getUid();
             homeHelper home = new homeHelper(homeName, userID, 0);
-            ref.child("homes").push().setValue(home);
-            // String homeID = ref.child("homes").push().getKey();
-            // ref.child("users").child(user.getUid()).child("homes").child(homeID).setValue(homeName);
-            // ref.child("homes").child(homeID).child("name").setValue(homeName);
+            //ref.child("homes").push().setValue(home);
+             String homeID = ref.child("homes").push().getKey();
+             ref.child("users").child(user.getUid()).child("homes").child(homeID).setValue(homeName);
+             ref.child("homes").child(homeID).setValue(home);
             // ref.child("homes").child(homeID).child("userID").setValue(userID);
             //ToDo: Add query to check and update order.:Can be handled in functions
             // ref.child("homes").child(homeID).child("order").setValue("");
