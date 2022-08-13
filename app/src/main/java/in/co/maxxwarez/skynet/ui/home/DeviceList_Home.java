@@ -76,13 +76,11 @@ public class DeviceList_Home extends Fragment {
                                     Log.i(TAG, "Device Attached to Home " + device.getValue());
 
                                 } else {
-                                    //textView = mView.findViewById(R.id.textView8);
-                                    //textView.setText("Available Devices");
+                                    textView = mView.findViewById(R.id.textView8);
+                                    textView.setText("Available Devices");
                                     String buttonID = deviceID;
                                     String buttonName = deviceID;
                                     String bName = (String) dataSnapshotHome.child("Info").child("name").getValue();
-
-                                    //String buttonName = dataSnapshotHome.child("Info").child("name").getValue().toString();
                                     createAvailableDevice(buttonID, bName);
 
                                     Log.i(TAG, "Device Not Attached to Home " + deviceID + bName);
