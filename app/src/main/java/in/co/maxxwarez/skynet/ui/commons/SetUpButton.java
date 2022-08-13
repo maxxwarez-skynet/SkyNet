@@ -43,7 +43,7 @@ import in.co.maxxwarez.skynet.ui.home.SetHomeDetail;
 public class SetUpButton extends Fragment implements View.OnClickListener {
     private static final String TAG = "SkyNet";
     private static String sID = "SkyNet-AutoConfig";
-    public Button mbutton;
+    public Button mButton;
     public String flag = "one";
     public String homeName;
     public int selected = 0;
@@ -74,7 +74,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
             Log.i(TAG, "run: 2");
             if (isConnected()) {
                 Log.i(TAG, "run: 3");
-                mbutton.setText(mSSID);
+                mButton.setText(mSSID);
                 return;
             }
             //handler.postDelayed(this, 200);
@@ -94,7 +94,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
                               Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_set_up_button, container, false);
-        mbutton = view.findViewById(R.id.set_up_button);
+        mButton = view.findViewById(R.id.set_up_button);
         Bundle b = getArguments();
         if (b != null) {
             if (b.get("flag") != null) {
@@ -102,20 +102,20 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
                 Log.i(TAG, "no  flag" + b.get("flag"));
             }
             if (b.get("text") != null) {
-                mbutton.setText(b.getString("text"));
+                mButton.setText(b.getString("text"));
                 Log.i(TAG, "The Key");
             }
 
         }
 
 
-        mbutton.setOnClickListener(this);
+        mButton.setOnClickListener(this);
         return view;
     }
 
     public void remoteEvent (String next){
             Log.i(TAG, "Remote Event" + next);
-            mbutton.setText(next);
+            mButton.setText(next);
 
     }
 
@@ -143,7 +143,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
                 noSetUp.mTextView.setText("Set Location for your home");
                 FragmentManager fragmentManager1 = getParentFragmentManager();
                 SetUpButton setUpButton = (SetUpButton) fragmentManager1.findFragmentById(R.id.home_settings_list);
-                setUpButton.mbutton.setText("Press the Locate Me button to get your location");
+                setUpButton.mButton.setText("Press the Locate Me button to get your location");
             } else {
                 Log.i(TAG, "Inside checkLocationPermission False ");
                 ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -266,8 +266,9 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
             homeHelper home = new homeHelper(homeName, userID, 0);
             //ref.child("homes").push().setValue(home);
              String homeID = ref.child("homes").push().getKey();
-             ref.child("users").child(user.getUid()).child("homes").child(homeID).setValue(homeName);
+             //ref.child("users").child(user.getUid()).child("homes").child(homeID).setValue(homeName);
              ref.child("homes").child(homeID).setValue(home);
+             home.addHome(homeID, homeName);
             // ref.child("homes").child(homeID).child("userID").setValue(userID);
             //ToDo: Add query to check and update order.:Can be handled in functions
             // ref.child("homes").child(homeID).child("order").setValue("");

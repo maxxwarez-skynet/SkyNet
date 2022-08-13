@@ -59,26 +59,33 @@ public class DeviceList_Home extends Fragment {
                 if (dataSnapshot.exists()) {
 
                     for (DataSnapshot device : dataSnapshot.getChildren()) {
+                        Log.i(TAG, "Device Home " + device);
+                         String deviceID = device.getKey();
 
-                        Query queryHome = ref.child("Device").child(device.getKey()).child("home");
+
+                        Query queryHome = ref.child("Device").child(device.getKey());
                         queryHome.addListenerForSingleValueEvent(new ValueEventListener() {
 
                             @Override
                             public void onDataChange (@NonNull DataSnapshot dataSnapshotHome) {
-                                if (dataSnapshotHome.exists()) {
+
+                                if (dataSnapshotHome.child("home").exists()) {
                                     String buttonID = device.getKey();
                                     String buttonName = (String) device.getValue();
                                     createAttachedDevice(buttonID, buttonName);
                                     Log.i(TAG, "Device Attached to Home " + device.getValue());
 
                                 } else {
-                                    textView = mView.findViewById(R.id.textView8);
-                                    textView.setText("Available Devices");
-                                    String buttonID = device.getKey();
-                                    String buttonName = (String) device.getValue();
-                                    createAvailableDevice(buttonID, buttonName);
+                                    //textView = mView.findViewById(R.id.textView8);
+                                    //textView.setText("Available Devices");
+                                    String buttonID = deviceID;
+                                    String buttonName = deviceID;
+                                    String bName = (String) dataSnapshotHome.child("Info").child("name").getValue();
 
-                                    Log.i(TAG, "Device Not Attached to Home " + device.getValue());
+                                    //String buttonName = dataSnapshotHome.child("Info").child("name").getValue().toString();
+                                    createAvailableDevice(buttonID, bName);
+
+                                    Log.i(TAG, "Device Not Attached to Home " + deviceID + bName);
                                 }
 
                             }
@@ -91,7 +98,7 @@ public class DeviceList_Home extends Fragment {
 
 
                         Log.i(TAG, "ChildrenCount " + dataSnapshot.getChildrenCount());
-                        String deviceID = device.getKey();
+                        //String deviceID = device.getKey();
                     }
                 }
 

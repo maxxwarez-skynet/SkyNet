@@ -16,9 +16,6 @@ import android.util.Log;
 import android.webkit.WebViewClient;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -33,7 +30,6 @@ import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.ui.commons.InstructionsDetail;
 import in.co.maxxwarez.skynet.ui.commons.NoSetUp;
 import in.co.maxxwarez.skynet.ui.commons.SetUpButton;
-import in.co.maxxwarez.skynet.ui.home.HomeList;
 
 
 public class NewDeviceSetup extends Fragment implements View.OnClickListener {
@@ -130,7 +126,7 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
     private void updateButton (String text, String flag) {
         FragmentManager fragmentManager = getParentFragmentManager();
         SetUpButton setUpButton = (SetUpButton) fragmentManager.findFragmentById(R.id.device_settings_list);
-        setUpButton.mbutton.setText(text);
+        setUpButton.mButton.setText(text);
         setUpButton.flag = flag;
         setUpButton.mChipID = chipID;
     }

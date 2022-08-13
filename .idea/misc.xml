@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../skynet/app/src/main/res/layout/fragment_device_list_home.xml" value="0.10260416666666666" />
+        <entry key="../skynet/app/src/main/res/layout/fragment_device_settings_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_device_list_home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_home_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_home_settings_list.xml" value="0.1" />

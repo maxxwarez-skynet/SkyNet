@@ -3,7 +3,6 @@ package in.co.maxxwarez.skynet.ui.fragments;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -13,7 +12,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -63,7 +61,7 @@ public class MapsFragment extends Fragment  {
             googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
                 @Override
                 public boolean onMyLocationButtonClick () {
-                    setUpButton.mbutton.setText("Tap on your location");
+                    setUpButton.mButton.setText("Tap on your location");
                     setUpButton.flag = "";
                     return false;
                 }
@@ -78,7 +76,7 @@ public class MapsFragment extends Fragment  {
                     googleMap.clear();
                     googleMap.addMarker(new MarkerOptions().position(myLocation).title("Marker at your " + mhomeName));
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
-                    setUpButton.mbutton.setText("Done");
+                    setUpButton.mButton.setText("Done");
                     Log.i(TAG, "clicked map");
                     setUpButton.flag = "three";
 
