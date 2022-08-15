@@ -75,7 +75,7 @@ public class DeviceList_Home extends Fragment {
                                     createAttachedDevice(buttonID, buttonName);
                                     Log.i(TAG, "Device Attached to Home " + device.getValue());
 
-                                } else {
+                                } /*else {
                                     textView = mView.findViewById(R.id.textView8);
                                     textView.setText("Available Devices");
                                     String buttonID = deviceID;
@@ -84,7 +84,7 @@ public class DeviceList_Home extends Fragment {
                                     createAvailableDevice(buttonID, bName);
 
                                     Log.i(TAG, "Device Not Attached to Home " + deviceID + bName);
-                                }
+                                }*/
 
                             }
 

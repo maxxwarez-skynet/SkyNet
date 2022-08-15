@@ -261,9 +261,9 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
             public void onDataChange (@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Log.i(TAG, "Key= " + ds.getKey() + " Value= " + ds.getValue());
-                    if (ds.getValue().toString() == s) {
+                    if (ds.getValue().equals (s) ){
                         key[0] = ds.getKey();
-                        sourceDevice = ds.getKey();
+                        //sourceDevice = ds.getKey();
                         Log.i(TAG, "Key of Source " + key[0]);
                     }
 

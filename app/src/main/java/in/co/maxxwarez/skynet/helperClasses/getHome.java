@@ -13,34 +13,29 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-@IgnoreExtraProperties
-public class homeHelper {
 
+public  class getHome extends AsyncTask<String, Void, String> {
+    public String key;
     private static final String TAG = "SkyNet";
+
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    @Override
+    protected String doInBackground (String... strings) {
 
-    public String name;
-    public String userID;
-    public int order;
-
-    public homeHelper() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
-    }
-
-    public homeHelper(String name, String userID, int order) {
-        this.name = name;
-        this.userID = userID;
-        this.order = order;
-    }
-
-    public void addHome(String homeID, String homeName) {
-        Query query = ref.child("users").child(user.getUid());
+        Query query = ref.child("users").child(user.getUid()).child("homes");
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ref.child("users").child(user.getUid()).child("homes").child(homeID).setValue(homeName);
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot home : dataSnapshot.getChildren()) {
+
+                        key = home.getKey();
+                        Log.i(TAG, "Home Helper " + key);
+                    }
+                }
+
             }
 
             @Override
@@ -48,5 +43,12 @@ public class homeHelper {
 
             }
         });
+        Log.i(TAG, "Home Helper Return" + key);
+        return key;
+    }
+
+    @Override
+    protected void onPostExecute (String result) {
+        Log.i(TAG, "Home Helper Res " + key);
     }
 }

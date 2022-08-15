@@ -1,6 +1,8 @@
 package in.co.maxxwarez.skynet.ui.home;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,20 +22,37 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import in.co.maxxwarez.skynet.R;
+import in.co.maxxwarez.skynet.helperClasses.GlobalVars;
+import in.co.maxxwarez.skynet.helperClasses.homeHelper;
+import in.co.maxxwarez.skynet.helperClasses.userHelper;
 import in.co.maxxwarez.skynet.ui.fragments.DetailList;
 import in.co.maxxwarez.skynet.ui.commons.InstructionsDetail;
 import in.co.maxxwarez.skynet.ui.commons.NoSetUp;
 import in.co.maxxwarez.skynet.ui.commons.SetUpButton;
+import in.co.maxxwarez.skynet.helperClasses.getHome;
 
 public class HomeFragment extends Fragment {
     private final static String TAG = "SkyNet";
+
+
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     Query query = ref.child("users").child(user.getUid()).child("homes");
 
     public View onCreateView (@NonNull LayoutInflater inflater,
                               ViewGroup container, Bundle savedInstanceState) {
+        userHelper userHelper = new userHelper();
+        userHelper.getUser();
+        GlobalVars globalVars = new GlobalVars();
+        globalVars.getUserObject();
+        Log.i(TAG, "Home Frag " + globalVars.getUserObject());
+
+       // getHome getHome = new getHome();
+      //  Log.i(TAG, "Home Frag 2 " + getHome.execute());
+
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+
+
         query.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override

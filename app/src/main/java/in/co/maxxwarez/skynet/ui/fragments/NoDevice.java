@@ -21,7 +21,7 @@ import com.google.android.material.tabs.TabLayout;
 import in.co.maxxwarez.skynet.MainActivity;
 import in.co.maxxwarez.skynet.R;
 import in.co.maxxwarez.skynet.ui.devices.DeviceFragment;
-import in.co.maxxwarez.skynet.ui.home.DeviceList_Home;
+import in.co.maxxwarez.skynet.ui.home.DeviceList_Available;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,11 +77,11 @@ public class NoDevice extends Fragment implements View.OnClickListener {
             Log.i(TAG, "Device yes " + flag);
             if (flag) {
                 Log.i(TAG, " Attach Device. Show Device List");
-                DeviceList_Home deviceList_home = new DeviceList_Home();
+                DeviceList_Available deviceList_available = new DeviceList_Available();
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                fragmentTransaction.replace(R.id.home_details_list, deviceList_home).commit();
+                fragmentTransaction.replace(R.id.home_details_list, deviceList_available).commit();
             } else {
                 //To-Do
                 //Setup Device Page
