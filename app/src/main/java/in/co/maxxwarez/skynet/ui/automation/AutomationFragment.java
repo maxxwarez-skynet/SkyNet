@@ -73,7 +73,7 @@ public class AutomationFragment extends Fragment {
                                 } else {
                                     Log.i(TAG, "ChildrenCount L Else ");
                                     logic_no();
-                                    logic_yes1();
+                                    //logic_yes1();
                                 }
 
                             }

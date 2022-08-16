@@ -261,9 +261,9 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
             public void onDataChange (@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Log.i(TAG, "Key= " + ds.getKey() + " Value= " + ds.getValue());
-                    if (ds.getValue().equals (s) ){
+                    if (ds.getKey().equals (s) ){
                         key[0] = ds.getKey();
-                        //sourceDevice = ds.getKey();
+                        sourceDevice = ds.getKey();
                         Log.i(TAG, "Key of Source " + key[0]);
                     }
 
@@ -437,7 +437,7 @@ public class AutomationSetupButton extends Fragment implements View.OnClickListe
         ///final ArrayList<String> result = new ArrayList<>();
         final long[] result = new long[1];
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        Query query = ref.child("Device").child(s).child("Data").child(ip);
+        Query query = ref.child("Device").child(sourceDevice).child("Data").child(ip);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override

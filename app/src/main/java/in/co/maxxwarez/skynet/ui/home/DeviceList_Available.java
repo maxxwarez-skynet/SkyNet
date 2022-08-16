@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,8 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
+import in.co.maxxwarez.skynet.MainActivity;
 import in.co.maxxwarez.skynet.R;
-import in.co.maxxwarez.skynet.ui.commons.SetUpButton;
+import in.co.maxxwarez.skynet.ui.devices.DeviceFragment;
 
 public class DeviceList_Available extends Fragment {
 
@@ -145,10 +147,10 @@ public class DeviceList_Available extends Fragment {
         FragmentManager fragmentManager = getParentFragmentManager();
         HomeList homeList = (HomeList) fragmentManager.findFragmentById(R.id.homeList);
         Log.i(TAG, "Clicked" + buttonID + " " + homeList.mHomeID);
-        createUser(buttonID, homeList.mHomeID);
+        attachDeviceToHome(buttonID, homeList.mHomeID);
     }
 
-    private void createUser(String buttonID, String mHomeID) {
+    private void attachDeviceToHome(String buttonID, String mHomeID) {
         Log.i(TAG, "Clicked" + buttonID + " " +mHomeID);
         Query query = ref.child("Device").child(buttonID).child("home");
 
@@ -167,10 +169,20 @@ public class DeviceList_Available extends Fragment {
             }
         });
 
-        DeviceList_Home deviceList_home = new DeviceList_Home();
+        /*DeviceList_Home deviceList_home = new DeviceList_Home();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         fragmentTransaction.replace(R.id.home_details_list, deviceList_home).commit();
+*/
+        DeviceFragment deviceFragment = new DeviceFragment();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        fragmentTransaction.replace(R.id.nav_host_fragment, deviceFragment).commit();
+        NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(1).setChecked(true);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.changeActionBarText("Devices");
     }
 }

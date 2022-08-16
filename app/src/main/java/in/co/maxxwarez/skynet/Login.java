@@ -50,13 +50,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onStart () {
         super.onStart();
-        Log.i(TAG, "firebaseAuthWithGoogle:" + "On Start");
         if (mAuth.getCurrentUser() != null) {
-            Log.i(TAG, "firebaseAuthWithGoogle:" + "On Start" + mAuth.getCurrentUser().getDisplayName());
            startIntent();
         }
-        else
-            Log.i(TAG, "firebaseAuthWithGoogle:" + "On Start no user");
+
     }
 
     public void startIntent(){

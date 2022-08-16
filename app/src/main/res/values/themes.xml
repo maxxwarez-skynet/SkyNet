@@ -15,6 +15,7 @@
     </style>
     <style name="Theme.SkyNet.NoActionBar">
         <item name="windowActionBar">false</item>
+
         <item name="windowNoTitle">true</item>
     </style>
     <style name="Theme.SkyNet.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
