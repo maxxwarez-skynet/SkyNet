@@ -155,7 +155,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
             Fbase.execute();
         }
 
-        if (flag == "four") {
+        if (flag == "fours") {
             Log.i(TAG, "clicked four " + flag);
             Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
             //panelIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -163,7 +163,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
             // handler.postDelayed(checkSettingOn, 1000);
         }
 
-        if (flag == "fours") {
+        if (flag == "four") {
             NewDeviceSetup newDeviceSetup = new NewDeviceSetup();
             FragmentManager fragmentManager = getParentFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -288,7 +288,7 @@ public class SetUpButton extends Fragment implements View.OnClickListener {
         protected String doInBackground (String... strings) {
 
             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-            ref.child("users").child(user.getUid()).child("deviceID").child(mChipID).setValue(mChipID);
+            ref.child("users").child(user.getUid()).child("deviceID").child(mChipID).child("active").setValue(true);
             ref.child("devicUsermap").child(mChipID).setValue(user.getUid());
             return mChipID;
         }

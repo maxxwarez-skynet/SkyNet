@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         findViewById(R.id.sign_in).setOnClickListener(this);
         Log.i(TAG, "firebaseAuthWithGoogle:" + "On Create");
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("520435142007-g5torl14gmdmai0fkl5rs0fbcrsji4ou.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
