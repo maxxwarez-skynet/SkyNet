@@ -1,11 +1,13 @@
 package in.co.maxxwarez.skynet.ui.devices;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +54,8 @@ public class NewDeviceSetup extends Fragment implements View.OnClickListener {
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "OnCreate");
+       // Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
+        //startActivity(panelIntent);
 
     }
 

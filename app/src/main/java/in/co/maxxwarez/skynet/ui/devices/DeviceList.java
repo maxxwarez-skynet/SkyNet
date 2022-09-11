@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -128,6 +130,11 @@ public class DeviceList extends Fragment {
 
     private void deviceClick (String buttonID, String buttonName) {
         Log.i(TAG, "Clicked" + buttonID + " " + buttonName);
+        DeviceDetail deviceDetail = new DeviceDetail();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        fragmentTransaction.replace(R.id.device_details_list, deviceDetail).commit();
         mDeviceID = buttonID;
 
     }

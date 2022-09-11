@@ -48,18 +48,19 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupWithNavController(navigationView, navController);
             userName.setText(user.getDisplayName());
             userEmail.setText(user.getEmailID());
-            //getActionBar().setTitle("Hello world App");
+            //getActionBar().setTitle("SkyNet");
             //changeActionBarText("Test");
-
-        } else {
-            Intent myIntent = new Intent(this, Login.class);
-            startActivity(myIntent);
+        }
+             else {
+                Intent myIntent = new Intent(this, Login.class);
+                startActivity(myIntent);
+            }
         }
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
 
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
