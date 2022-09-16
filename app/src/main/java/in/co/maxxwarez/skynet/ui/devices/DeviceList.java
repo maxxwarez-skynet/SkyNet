@@ -76,12 +76,12 @@ public class DeviceList extends Fragment {
                             //ToDo: Look for Order and set homeID with order = 0
                         }
                         String buttonID = device.getKey();
-                        String buttonName = (String) device.getValue();
+                        String buttonName = (String) device.child("name").getValue();
                         createDevice(buttonID, buttonName);
                         // createDevice(buttonID, buttonName);
 
 
-                        Log.i(TAG, "Key " + buttonID + " Value " + buttonName);
+                        Log.i(TAG, "Key " + buttonID + " Value " + dataSnapshot.toString());
                     }
                 }
 
