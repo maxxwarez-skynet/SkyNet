@@ -112,8 +112,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         int i = v.getId();
         if (i == R.id.sign_in) {
-
-            Log.i(TAG, "firebaseAuthWithGoogle:" + "ONE:");
             signIn();
 
         }
